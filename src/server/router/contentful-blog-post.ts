@@ -30,11 +30,16 @@ export const contentfulBlogPostRouter = createRouter()
   })
   .query("getPost", {
     input: z.object({
-      id: z.string(),
+      slug: z.string().array(),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.contentful.getEntry(input.id).then((res: any) => {
-        return res;
-      });
+      return await ctx.contentful
+        .getEntries({
+          content_type: "post",
+          "fields.slug[in]": input.slug[0],
+        })
+        .then((res: any) => {
+          return res;
+        });
     },
   });

@@ -51,28 +51,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export async function getStaticProps(
-  context: GetStaticPropsContext<{ id: string }>
-) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   const ssg = await createSSGHelpers({
     router: contentfulBlogPostRouter,
     ctx: {},
     transformer: superjson, // optional - adds superjson serialization
   });
-  const id = context.params?.id as string;
-
-  // prefetch `post.byId`
-  await ssg.fetchQuery("getPost", {
-    id,
-  });
-
+  console.log(context);
   return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      id,
-    },
+    props: {},
     revalidate: 1,
   };
+  // prefetch `post.byId`
+  // await ssg.fetchQuery("getPost", {
+  //   slug: context?.params?.slug,
+  // });
+
+  // return {
+  //   props: {
+  //     trpcState: ssg.dehydrate(),
+  //     slug,
+  //   },
+  //   revalidate: 1,
+  // };
 }
 
 export default Page;
