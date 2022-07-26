@@ -11,16 +11,23 @@ import { createSSGHelpers } from "@trpc/react/ssg";
 import { contentfulBlogPostRouter } from "../server/router/contentful-blog-post";
 import superjson from "superjson";
 import { createContext } from "../server/router/context";
+import React, {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactFragment,
+  ReactPortal,
+} from "react";
 
-const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Page = (props: { trpcState?: any; slug?: any }) => {
   const { slug } = props;
   const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
-  const { data } = postQuery;
-  if (postQuery.status !== "success") {
-    // won't happen since we're using `fallback: "blocking"`
-    return <>Loading...</>;
+  const [{ data }, setData] = React.useState(
+    props.trpcState.json.queries[0].state
+  );
+  if (postQuery.status === "success") {
+    setData(postQuery.data);
   }
-  // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
   return (
     <>
       <Head>
