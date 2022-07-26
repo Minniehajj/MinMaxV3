@@ -16,7 +16,10 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { slug } = props;
   const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
   const { data } = postQuery;
-  console.log(data);
+  if (postQuery.status !== "success") {
+    // won't happen since we're using `fallback: "blocking"`
+    return <>Loading...</>;
+  }
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
   return (
     <>

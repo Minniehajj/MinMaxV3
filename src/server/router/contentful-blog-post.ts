@@ -33,25 +33,22 @@ export const contentfulBlogPostRouter = createRouter()
       slug: z.union([z.string(), z.string().array()]),
     }),
     async resolve({ input, ctx }) {
-      console.log("FETCHING", input.slug[0]);
-      const data = await ctx.contentful
-        .getEntries({
-          content_type: "post",
-          "fields.slug": input.slug[0],
-        })
-        .then((res) => {
-          return res;
-        });
-      console.log(data);
-      return data;
       return await ctx.contentful
         .getEntries({
           content_type: "post",
           "fields.slug": input.slug[0],
         })
-        .then((res: any) => {
-          console.log(res);
-          return JSON.stringify(res);
-        });
+        .then(
+          (res: {
+            items: {
+              fields: {
+                slug: any;
+                title: any;
+              };
+            }[];
+          }) => {
+            return res;
+          }
+        );
     },
   });
