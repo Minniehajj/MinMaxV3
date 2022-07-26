@@ -1,14 +1,23 @@
-import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+  NextPage,
+} from "next";
 import Head from "next/head";
 import { ContentfulClient } from "../server/db/client";
 import { trpc } from "../utils/trpc";
 import { createSSGHelpers } from "@trpc/react/ssg";
 import { contentfulBlogPostRouter } from "../server/router/contentful-blog-post";
 import superjson from "superjson";
+import { createContext } from "../server/router/context";
 
-const Page: NextPage = () => {
+const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { slug } = props;
+  const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
+  const { data } = postQuery;
+  console.log(data);
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-  const posts = trpc.useQuery(["blogpost.getAllSlugs"]);
   return (
     <>
       <Head>
@@ -19,10 +28,8 @@ const Page: NextPage = () => {
 
       <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
         <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          Create <span className="text-purple-300">T3</span> App
+          {data?.items[0]?.fields?.title}
         </h1>
-        <p className="text-2xl text-gray-700">This stack uses:</p>
-        <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3"></div>
       </main>
     </>
   );
@@ -36,13 +43,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: posts.items.map(
       (post: {
         fields: {
-          id: string;
           slug: string;
         };
       }) => ({
         params: {
           slug: [post.fields.slug],
-          id: [post.fields.id],
         },
       })
     ),
@@ -52,28 +57,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const ssg = await createSSGHelpers({
+  const ssg = createSSGHelpers({
     router: contentfulBlogPostRouter,
-    ctx: {},
+    ctx: await createContext(),
     transformer: superjson, // optional - adds superjson serialization
   });
-  console.log(context);
-  return {
-    props: {},
-    revalidate: 1,
-  };
-  // prefetch `post.byId`
-  // await ssg.fetchQuery("getPost", {
-  //   slug: context?.params?.slug,
-  // });
-
+  // console.log(context);
+  const slug = context?.params?.slug || [];
   // return {
-  //   props: {
-  //     trpcState: ssg.dehydrate(),
-  //     slug,
-  //   },
+  //   props: {},
   //   revalidate: 1,
   // };
+  // prefetch `post.byId`
+  await ssg.fetchQuery("getPost", {
+    slug,
+  });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      slug,
+    },
+    revalidate: 1,
+  };
 }
 
 export default Page;

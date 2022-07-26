@@ -1,4 +1,5 @@
 import { env } from "../../env/server.mjs";
+import { PrismaClient } from "@prisma/client";
 
 export const ContentfulClient = require("contentful").createClient({
   // This is the space ID. A space is like a project folder in Contentful terms
@@ -9,6 +10,7 @@ export const ContentfulClient = require("contentful").createClient({
 
 declare global {
   var contentful: typeof ContentfulClient | undefined;
+  var prisma: PrismaClient | undefined;
 }
 
 export const contentful =
@@ -22,4 +24,14 @@ export const contentful =
 
 if (env.NODE_ENV !== "production") {
   global.contentful = contentful;
+}
+
+export const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ["query"],
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  global.prisma = prisma;
 }
