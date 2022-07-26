@@ -1,9 +1,4 @@
-import type {
-  GetStaticPaths,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-  NextPage,
-} from "next";
+import type { GetStaticPaths, GetStaticPropsContext } from "next";
 import Head from "next/head";
 import { ContentfulClient } from "../server/db/client";
 import { trpc } from "../utils/trpc";
@@ -11,23 +6,19 @@ import { createSSGHelpers } from "@trpc/react/ssg";
 import { contentfulBlogPostRouter } from "../server/router/contentful-blog-post";
 import superjson from "superjson";
 import { createContext } from "../server/router/context";
-import React, {
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-} from "react";
+import React from "react";
 
 const Page = (props: { trpcState?: any; slug?: any }) => {
   const { slug } = props;
   const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
-  const [{ data }, setData] = React.useState(
-    props.trpcState.json.queries[0].state
+  const [data, setData] = React.useState(
+    props.trpcState.json.queries[0].state.data
   );
-  if (postQuery.status === "success") {
-    setData(postQuery.data);
-  }
+  React.useEffect(() => {
+    if (postQuery.status === "success") {
+      setData(postQuery.data);
+    }
+  }, [postQuery.data, postQuery.status]);
   return (
     <>
       <Head>
