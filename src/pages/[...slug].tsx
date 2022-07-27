@@ -10,9 +10,8 @@ import Image from "next/future/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
 import { TimerIcon } from "@radix-ui/react-icons";
-import { GraphQLClient } from "graphql-request";
 import { extractPostSlugs } from "utils/extract";
-
+import { graph } from "server/db/client";
 const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
   const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
 
@@ -65,18 +64,16 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   let slugs: { params: { slug: string[] } }[] = [];
-  if (graph) {
-    const entry = await graph.request(
-      `query{
+  const entry = await graph.request(
+    `query{
         postCollection(where: { slug_exists: true }) {
             items {
               slug
             }
           }
         }`
-    );
-    slugs = extractPostSlugs(entry);
-  }
+  );
+  slugs = extractPostSlugs(entry);
 
   return {
     paths: slugs,
