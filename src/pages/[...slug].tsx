@@ -10,15 +10,11 @@ import React from "react";
 
 const Page = (props: { trpcState?: any; slug?: any }) => {
   const { slug } = props;
-  const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
+  // const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
   const [data, setData] = React.useState(
-    props.trpcState.json.queries[0].state.data
+    props.trpcState.json.queries[0].state.data[0]
   );
-  React.useEffect(() => {
-    if (postQuery.status === "success") {
-      setData(postQuery.data);
-    }
-  }, [postQuery.data, postQuery.status]);
+
   return (
     <>
       <Head>
@@ -29,7 +25,7 @@ const Page = (props: { trpcState?: any; slug?: any }) => {
 
       <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
         <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          {data?.items[0]?.fields?.title}
+          {data.title}
         </h1>
       </main>
     </>

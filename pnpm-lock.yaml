@@ -25,6 +25,8 @@ specifiers:
   contentful: 10.0.0-beta-v10.8
   eslint: 8.18.0
   eslint-config-next: 12.2.3
+  mtg-decklist-parser: ^2.0.0
+  mtg-decklist-parser2: ^2.0.13
   next: 12.2.3
   next-auth: ^4.10.2
   next-themes: ^0.1.1
@@ -35,6 +37,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-query: 3.39.2
+  react-string-replace: ^1.1.0
   react-twitter-widgets: ^1.11.0
   react-youtube: ^9.0.2
   scryfall-api: ^3.0.2
@@ -44,6 +47,7 @@ specifiers:
   tailwindcss: ^3.1.6
   tailwindcss-radix: ^2.3.1
   typescript: 4.7.4
+  usehooks-ts: ^2.6.0
   zod: ^3.17.3
 
 dependencies:
@@ -60,18 +64,22 @@ dependencies:
   '@trpc/server': 9.26.2
   axios: 0.27.2
   contentful: 10.0.0-beta-v10.8
+  mtg-decklist-parser: 2.0.0
+  mtg-decklist-parser2: 2.0.13_@types+node@18.0.0
   next: 12.2.3_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.10.2_biqbaboplfbrettd7655fr4n2y
   next-themes: 0.1.1_53oqlnqnxhbetdy4ljlkkvmoby
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
+  react-string-replace: 1.1.0
   react-twitter-widgets: 1.11.0_react@18.2.0
   react-youtube: 9.0.3_react@18.2.0
   scryfall-api: 3.0.3_axios@0.27.2
   superjson: 1.9.1
   tailwind-scrollbar-hide: 1.1.7
   tailwindcss-radix: 2.4.0
+  usehooks-ts: 2.6.0_react@18.2.0
   zod: 3.17.10
 
 devDependencies:
@@ -2161,7 +2169,6 @@ packages:
 
   /@types/node/18.0.0:
     resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
-    dev: true
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -2682,6 +2689,16 @@ packages:
       path-type: 4.0.0
       yaml: 1.10.2
     dev: true
+
+  /crlf-normalize/1.0.7_@types+node@18.0.0:
+    resolution: {integrity: sha512-USifFsvW0fI8BuHpR0zqHjr2uQdbQ5awWmk0UbWF/Y3jScR+6gFqukzfavi2FzrjQ65ihSMPNGx07K6CPno8sQ==}
+    dependencies:
+      ts-type: 2.1.8_@types+node@18.0.0
+    transitivePeerDependencies:
+      - '@types/bluebird'
+      - '@types/node'
+      - ts-toolbelt
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -3240,6 +3257,13 @@ packages:
   /fast-levenshtein/2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
+
+  /fast-xml-parser/3.21.1:
+    resolution: {integrity: sha512-FTFVjYoBOZTJekiUsawGsSYV9QL0A+zDYCRj7y34IO6Jg+2IMYEtQa+bbictpdpV8dHxXywqU7C0gRDEOFtBFg==}
+    hasBin: true
+    dependencies:
+      strnum: 1.0.5
+    dev: false
 
   /fastq/1.13.0:
     resolution: {integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==}
@@ -3807,6 +3831,24 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
     dev: true
 
+  /mtg-decklist-parser/2.0.0:
+    resolution: {integrity: sha512-HiWS4kQ/hf450LDMWBA8Bx7qrJNW7DF/hiDkqr++YUE+PlH9gOg96znSgu3PsLSfvxBu+XPN6K8+eVnOtUflBQ==}
+    dependencies:
+      fast-xml-parser: 3.21.1
+    dev: false
+
+  /mtg-decklist-parser2/2.0.13_@types+node@18.0.0:
+    resolution: {integrity: sha512-pOsnJpMiFrJsyMMOrXa4ec9Q+9rMsGivZXIksFTz7fHw8ZYEnHh++Y5OesjxW4iWmUE0uSeahu8DNWKHYOYJVw==}
+    dependencies:
+      crlf-normalize: 1.0.7_@types+node@18.0.0
+      fast-xml-parser: 3.21.1
+      tslib: 2.4.0
+    transitivePeerDependencies:
+      - '@types/bluebird'
+      - '@types/node'
+      - ts-toolbelt
+    dev: false
+
   /nano-time/1.0.0:
     resolution: {integrity: sha512-flnngywOoQ0lLQOTRNexn2gGSNuM9bKj9RZAWSzhQ+UJYaAFG9bac4DW9VHjUAzrOaIcajHybCTHe/bkvozQqA==}
     dependencies:
@@ -4288,6 +4330,11 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-string-replace/1.1.0:
+    resolution: {integrity: sha512-N6RalSDFGbOHs0IJi1H611WbZsvk3ZT47Jl2JEXFbiS3kTwsdCYij70Keo/tWtLy7sfhDsYm7CwNM/WmjXIaMw==}
+    engines: {node: '>=0.12.0'}
+    dev: false
+
   /react-twitter-widgets/1.11.0_react@18.2.0:
     resolution: {integrity: sha512-PMCLJQc30iqy01y1b2+HnMfCX+ZkOxWaPKJb4BhHgOgjSjoZb68K5T0nq3q+3YbX9K7OH0bhptgDihtBG/BqRQ==}
     peerDependencies:
@@ -4556,6 +4603,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /strnum/1.0.5:
+    resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
+    dev: false
+
   /styled-jsx/5.0.2_react@18.2.0:
     resolution: {integrity: sha512-LqPQrbBh3egD57NBcHET4qcgshPks+yblyhPlH2GY8oaDgKs8SK4C3dBh3oSJjgzJ3G5t1SYEZGHkP+QEpX9EQ==}
     engines: {node: '>= 12.0.0'}
@@ -4679,6 +4730,18 @@ packages:
       is-number: 7.0.0
     dev: true
 
+  /ts-type/2.1.8_@types+node@18.0.0:
+    resolution: {integrity: sha512-iWYYRpeU1t5lW8AGYSX0px1Lx1el5yTFt9cyr+Y2v+EkdJ7LYwuiM+qIFKaZXS3N1ow9TX3KrMtt6VetuzTDXw==}
+    peerDependencies:
+      '@types/bluebird': '*'
+      '@types/node': '*'
+      ts-toolbelt: ^9.6.0
+    dependencies:
+      '@types/node': 18.0.0
+      tslib: 2.4.0
+      typedarray-dts: 1.0.0
+    dev: false
+
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}
     dependencies:
@@ -4721,6 +4784,10 @@ packages:
   /type-fest/2.17.0:
     resolution: {integrity: sha512-U+g3/JVXnOki1kLSc+xZGPRll3Ah9u2VIG6Sn9iH9YX6UkPERmt6O/0fIyTgsd2/whV0+gAaHAg8fz6sG1QzMA==}
     engines: {node: '>=12.20'}
+    dev: false
+
+  /typedarray-dts/1.0.0:
+    resolution: {integrity: sha512-Ka0DBegjuV9IPYFT1h0Qqk5U4pccebNIJCGl8C5uU7xtOs+jpJvKGAY4fHGK25hTmXZOEUl9Cnsg5cS6K/b5DA==}
     dev: false
 
   /typescript/4.7.4:
@@ -4789,6 +4856,14 @@ packages:
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /usehooks-ts/2.6.0_react@18.2.0:
+    resolution: {integrity: sha512-Kj/4oc2nOxRDGTDb2v1ZulF7+tpeXFuqI6cUesM0Vic7TPPDlFORxKh4ivsYg+NTvX/YbM+lhqqkfFTiIt23eg==}
+    peerDependencies:
+      react: '>=16.9.0'
     dependencies:
       react: 18.2.0
     dev: false

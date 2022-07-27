@@ -1,5 +1,7 @@
 import { createRouter } from "./context";
 import { z } from "zod";
+import { PostProps } from "../../types";
+import getReadTime from "../../utils/getReadTime";
 
 export const contentfulBlogPostRouter = createRouter()
   .query("hello", {
@@ -41,13 +43,27 @@ export const contentfulBlogPostRouter = createRouter()
         .then(
           (res: {
             items: {
-              fields: {
-                slug: any;
-                title: any;
-              };
+              fields: PostProps;
             }[];
           }) => {
-            return res;
+            return res.items.map((item) => {
+              if (item.fields?.pageBody) {
+                item.fields.readTime = getReadTime(
+                  JSON.stringify(item.fields?.pageBody)
+                );
+              }
+              return {
+                slug: item.fields.slug,
+                title: item.fields.title,
+                heroImage: item.fields.heroImage,
+                publishDate: item.fields.publishDate,
+                authorsCollection: item.fields.authorsCollection,
+                metaDescription: item.fields.metaDescription,
+                tagsCollection: item.fields.tagsCollection,
+                pageBody: item.fields.pageBody,
+                readTime: item.fields.readTime,
+              };
+            });
           }
         );
     },
