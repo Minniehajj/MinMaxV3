@@ -32,16 +32,28 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
             {data.readTime} minute read
           </p>
           <div className="flex gap-8">
-            {data.authorsCollection?.items?.map((author, index) => {
-              return (
-                <p className="flex items-center gap-4 text-sm" key={index}>
-                  <Avatar.Root>
-                    <Avatar.Image className="!my-0 w-12 rounded-full" src={author.image.url}></Avatar.Image>
-                  </Avatar.Root>
-                  {author.title}
-                </p>
-              );
-            })}
+            {data.authorsCollection?.items?.map(
+              (
+                author: {
+                  image: { url: string };
+                  title: string;
+                },
+                index: React.Key
+              ) => {
+                return (
+                  <p className="flex items-center gap-4 text-sm" key={index}>
+                    <Avatar.Root>
+                      <Avatar.Image
+                        className="!my-0 w-12 rounded-full"
+                        alt={author.title}
+                        src={author.image.url}
+                      ></Avatar.Image>
+                    </Avatar.Root>
+                    {author.title}
+                  </p>
+                );
+              }
+            )}
           </div>
           <div className="mb-12" />
           {documentToReactComponents(data.pageBody.json, RichText(data.pageBody))}

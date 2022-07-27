@@ -33,12 +33,9 @@ const Hero: FC<HeroProps> = ({ title, slug, image, description, setBackgroundIma
               return (
                 <p className="flex items-center gap-4 text-sm" key={index}>
                   <Avatar.Root>
-                    <Avatar.Image
-                      className="my-0 w-12 rounded-full"
-                      src={author?.fields?.image?.fields?.file.url}
-                    ></Avatar.Image>
+                    <Avatar.Image className="my-0 w-12 rounded-full" src={author?.image?.url}></Avatar.Image>
                   </Avatar.Root>
-                  {author.fields.title}
+                  {author.title}
                 </p>
               );
             })}
