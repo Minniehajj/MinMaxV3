@@ -4,24 +4,28 @@ import { FC, memo, useEffect, useMemo, useState } from "react";
 import { CardToolTipProps } from "./types";
 import getCard from "utils/getCard";
 import { Card } from "scryfall-api";
+import { trpc } from "utils/trpc";
 
 let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
   const [image, setImage] = useState<any>("");
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
-  useEffect(() => {
-    if (tooltipOpen) {
-      getCard(name).then((card) => {
-        if (card?.image_uris?.png) {
-          return setImage(card?.image_uris?.png);
-        } else if (card?.card_faces) {
-          return setImage(card?.card_faces[0]?.image_uris?.png);
-        }
-      });
-    }
-    return () => {
-      setImage("");
-    };
-  }, [tooltipOpen, name]);
+  const { data, refetch, isLoading } = trpc.useQuery([
+    "card.getCard",
+    {
+      card: name,
+    },
+  ]);
+  // if (tooltipOpen && !isLoading) {
+  //   if (data?.image_uris?.png) {
+  //     console.log(data.image_uris.png);
+  //     // setImage(data?.image_uris?.png);
+  //   } else if (data?.card_faces) {
+  //     // setImage(data?.card_faces[0]?.image_uris?.png);
+  //   } else {
+  //     // setImage("");
+  //   }
+  // }
+
   return (
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root open={tooltipOpen} onOpenChange={(open) => setTooltipOpen(open)}>
@@ -35,7 +39,8 @@ let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
           </button>
         </Tooltip.Trigger>
         <Tooltip.Content className="rounded-sm">
-          <div>{image && <Image src={image} width={248} height={346} alt="test" />}</div>
+          {data?.image_uris && <Image src={data.image_uris.png} alt={data.name} width={248} height={346} />}
+          {/* <div>{image && <Image src={image} width={248} height={346} alt="test" />}</div> */}
           <Tooltip.Arrow />
         </Tooltip.Content>
       </Tooltip.Root>
