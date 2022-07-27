@@ -13,8 +13,8 @@ import { UrlObject } from "url";
 const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: string) => void }) => {
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
   // const posts = trpc.useQuery(["blogpost.getAllSlugs"]);
-  const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
-  // console.log(data);
+  const { data } = props.trpcState.json.queries[0].state;
+  // const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
   return (
     <main className="container mx-auto flex h-screen w-full flex-col p-4">
       <Hero
@@ -76,13 +76,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     ctx: await createContext(),
     transformer: superjson, // optional - adds superjson serialization
   });
-  // console.log(context);
   const slug = context?.params?.slug || [];
-  // return {
-  //   props: {},
-  //   revalidate: 1,
-  // };
-  // prefetch `post.byId`
   await ssg.fetchQuery("getAllPostsForHome");
 
   return {
