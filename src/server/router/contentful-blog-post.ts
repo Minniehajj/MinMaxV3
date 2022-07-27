@@ -30,6 +30,32 @@ export const contentfulBlogPostRouter = createRouter()
         });
     },
   })
+  .query("getAllPostsForHome", {
+    async resolve({ ctx }) {
+      // return await ctx.prisma.example.findMany();
+      return await ctx.contentful
+        .getEntries({
+          content_type: "post",
+        })
+        .then((res: { items: { fields: PostProps }[] }) => {
+          return res.items.map((item) => {
+            if (item.fields?.pageBody) {
+              item.fields.readTime = getReadTime(JSON.stringify(item.fields?.pageBody));
+            }
+            return {
+              slug: item.fields.slug,
+              title: item.fields.title,
+              heroImage: item.fields.heroImage,
+              publishDate: item.fields.publishDate,
+              authors: item.fields.authors,
+              metaDescription: item.fields.metaDescription,
+              tags: item.fields.tags,
+              readTime: item.fields.readTime,
+            };
+          });
+        });
+    },
+  })
   .query("getPost", {
     input: z.object({
       slug: z.union([z.string(), z.string().array()]),
@@ -38,6 +64,7 @@ export const contentfulBlogPostRouter = createRouter()
       return await ctx.contentful
         .getEntries({
           content_type: "post",
+          limit: 1,
           "fields.slug": input.slug[0],
         })
         .then(
@@ -48,18 +75,16 @@ export const contentfulBlogPostRouter = createRouter()
           }) => {
             return res.items.map((item) => {
               if (item.fields?.pageBody) {
-                item.fields.readTime = getReadTime(
-                  JSON.stringify(item.fields?.pageBody)
-                );
+                item.fields.readTime = getReadTime(JSON.stringify(item.fields?.pageBody));
               }
               return {
                 slug: item.fields.slug,
                 title: item.fields.title,
                 heroImage: item.fields.heroImage,
                 publishDate: item.fields.publishDate,
-                authorsCollection: item.fields.authorsCollection,
+                authors: item.fields.authors,
                 metaDescription: item.fields.metaDescription,
-                tagsCollection: item.fields.tagsCollection,
+                tags: item.fields.tags,
                 pageBody: item.fields.pageBody,
                 readTime: item.fields.readTime,
               };

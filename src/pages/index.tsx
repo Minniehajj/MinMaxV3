@@ -1,6 +1,10 @@
-import type { NextPage } from "next";
+import { createSSGHelpers } from "@trpc/react/ssg";
+import type { GetStaticPropsContext, NextPage } from "next";
 import Head from "next/head";
+import { contentfulBlogPostRouter } from "server/router/contentful-blog-post";
 import { trpc } from "../utils/trpc";
+import superjson from "superjson";
+import { createContext } from "../server/router/context";
 
 const Home: NextPage = () => {
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
@@ -16,4 +20,29 @@ const Home: NextPage = () => {
   );
 };
 
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const ssg = createSSGHelpers({
+    router: contentfulBlogPostRouter,
+    ctx: await createContext(),
+    transformer: superjson, // optional - adds superjson serialization
+  });
+  // console.log(context);
+  const slug = context?.params?.slug || [];
+  // return {
+  //   props: {},
+  //   revalidate: 1,
+  // };
+  // prefetch `post.byId`
+  await ssg.fetchQuery("getPost", {
+    slug,
+  });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      slug,
+    },
+    revalidate: 1,
+  };
+}
 export default Home;

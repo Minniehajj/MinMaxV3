@@ -11,7 +11,7 @@ export type PostProps = {
     height: number;
   };
   publishDate: string;
-  authorsCollection: {
+  authors: {
     items: {
       title: string;
       twitter: string;
@@ -22,7 +22,7 @@ export type PostProps = {
     }[];
   };
   metaDescription: string;
-  tagsCollection: {
+  tags: {
     items: {
       title: string;
       slug: string;
@@ -39,22 +39,22 @@ export type PostProps = {
         }[];
         data: {
           target: {
-            fields:{
+            fields: {
               title: string;
-              file:{
+              file: {
                 url: string;
                 fileName: string;
                 contentType: string;
                 details: {
-                  image:{
+                  image: {
                     width: number;
                     height: number;
-                  }
-                }
-              }
-            }
-          }
-        }
+                  };
+                };
+              };
+            };
+          };
+        };
       }[];
     }[];
   };
