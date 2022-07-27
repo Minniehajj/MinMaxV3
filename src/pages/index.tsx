@@ -34,24 +34,8 @@ const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: 
             post: {
               slug: string;
               heroImage: JSX.IntrinsicAttributes & CardImageProps;
-              title:
-                | string
-                | number
-                | boolean
-                | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                | React.ReactFragment
-                | React.ReactPortal
-                | null
-                | undefined;
-              readTime:
-                | string
-                | number
-                | boolean
-                | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-                | React.ReactFragment
-                | React.ReactPortal
-                | null
-                | undefined;
+              title: string;
+              readTime: number;
               authors: { items: any[] };
             },
             index: number

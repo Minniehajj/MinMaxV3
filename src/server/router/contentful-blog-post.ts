@@ -93,7 +93,12 @@ export const contentfulBlogPostRouter = createRouter()
               return {
                 slug: item.fields.slug,
                 title: item.fields.title,
-                heroImage: item.fields.heroImage,
+                heroImage: {
+                  src: "https:" + item.fields.heroImage?.fields?.file?.url,
+                  alt: item.fields.heroImage?.fields?.title ?? "",
+                  width: item.fields.heroImage?.fields?.file?.details?.image?.width,
+                  height: item.fields.heroImage?.fields?.file?.details?.image?.height,
+                },
                 publishDate: item.fields.publishDate,
                 authors: item.fields.authors,
                 metaDescription: item.fields.metaDescription,
