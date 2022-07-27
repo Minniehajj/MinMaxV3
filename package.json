@@ -26,6 +26,8 @@
     "axios": "^0.27.2",
     "contentful": "10.0.0-beta-v10.8",
     "framer-motion": "^6.5.1",
+    "graphql": "^16.5.0",
+    "graphql-request": "^4.3.0",
     "mtg-decklist-parser": "^2.0.0",
     "mtg-decklist-parser2": "^2.0.13",
     "next": "12.2.3",

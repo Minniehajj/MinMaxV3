@@ -9,6 +9,8 @@ export type PostProps = {
     url: string;
     width: number;
     height: number;
+    src?: string;
+    alt?: string;
   };
   publishDate: string;
   authors: {
@@ -29,34 +31,22 @@ export type PostProps = {
     }[];
   };
   pageBody: {
-    content: {
-      nodeType: string;
-      data: {};
-      content: {
-        content: {
-          nodeType: string;
-          value: string;
-        }[];
-        data: {
-          target: {
-            fields: {
-              title: string;
-              file: {
-                url: string;
-                fileName: string;
-                contentType: string;
-                details: {
-                  image: {
-                    width: number;
-                    height: number;
-                  };
-                };
-              };
-            };
+    json: any;
+    links: {
+      assets: {
+        block: {
+          sys: {
+            id: string;
           };
+          title: string;
+          url: string;
+          description: string;
+          contentType: string;
+          width: number;
+          height: number;
         };
-      }[];
-    }[];
+      };
+    };
   };
   readTime: number;
 };

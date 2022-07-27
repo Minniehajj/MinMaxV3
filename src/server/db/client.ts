@@ -1,29 +1,10 @@
-import { env } from "../../env/server.mjs";
+// src/server/db/client.ts
 import { PrismaClient } from "@prisma/client";
-
-export const ContentfulClient = require("contentful").createClient({
-  // This is the space ID. A space is like a project folder in Contentful terms
-  space: process.env.CONTENTFUL_SPACE_ID,
-  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-});
+import { GraphQLClient } from "graphql-request";
 
 declare global {
-  var contentful: typeof ContentfulClient | undefined;
   var prisma: PrismaClient | undefined;
-}
-
-export const contentful =
-  global.contentful ||
-  require("contentful").createClient({
-    // This is the space ID. A space is like a project folder in Contentful terms
-    space: process.env.CONTENTFUL_SPACE_ID,
-    // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-  });
-
-if (env.NODE_ENV !== "production") {
-  global.contentful = contentful;
+  var graph: GraphQLClient | undefined;
 }
 
 export const prisma =
@@ -32,6 +13,16 @@ export const prisma =
     log: ["query"],
   });
 
+export const graph =
+  global.graph ||
+  new GraphQLClient(`https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+    },
+  });
+
 if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
+  global.graph = graph;
 }

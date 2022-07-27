@@ -2,6 +2,8 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import { PostProps } from "../../types";
 import getReadTime from "../../utils/getReadTime";
+import { POST_ENTRY_GRAPHQL_FIELDS, POST_GRAPHQL_FIELDS } from "vars/graphQLFields";
+import { extractPost, extractPostEntries } from "utils/extract";
 
 export const contentfulBlogPostRouter = createRouter()
   .query("hello", {
@@ -16,20 +18,6 @@ export const contentfulBlogPostRouter = createRouter()
       };
     },
   })
-  .query("getAllSlugs", {
-    async resolve({ ctx }) {
-      // return await ctx.prisma.example.findMany();
-      return await ctx.contentful
-        .getEntries({
-          content_type: "post",
-        })
-        .then((res: { items: any[] }) => {
-          return res.items.map((item: { fields: { slug: any } }) => {
-            return item.fields.slug;
-          });
-        });
-    },
-  })
   .query("getAllPostsForHome", {
     input: z
       .object({
@@ -37,36 +25,21 @@ export const contentfulBlogPostRouter = createRouter()
       })
       .nullish(),
     async resolve({ input, ctx }) {
-      // return await ctx.prisma.example.findMany();
-      const page = input?.page ?? 0;
-      return await ctx.contentful
-        .getEntries({
-          content_type: "post",
-          limit: 10,
-          skip: page * 10,
-        })
-        .then((res: { items: { fields: PostProps }[] }) => {
-          return res.items.map((item) => {
-            if (item.fields?.pageBody) {
-              item.fields.readTime = getReadTime(JSON.stringify(item.fields?.pageBody));
+      const page = input?.page ?? 1;
+      const parsedPageNumber = parseInt(page as unknown as string, 10);
+      const queryLimit = parsedPageNumber === 1 ? 10 : 9;
+      const skipMultiplier = parsedPageNumber === 1 ? 0 : parsedPageNumber - 1;
+      const skip = skipMultiplier > 0 ? queryLimit * skipMultiplier : 0;
+      const entries = await ctx.graph.request(
+        `query{
+            postCollection(limit: ${queryLimit}, skip: ${skip}, order: publishDate_DESC) {
+              items {
+                ${POST_GRAPHQL_FIELDS}
+              }
             }
-            return {
-              slug: item.fields.slug,
-              title: item.fields.title,
-              heroImage: {
-                src: "https:" + item.fields.heroImage?.fields?.file?.url,
-                alt: item.fields.heroImage?.fields?.title ?? "",
-                width: item.fields.heroImage?.fields?.file?.details?.image?.width,
-                height: item.fields.heroImage?.fields?.file?.details?.image?.height,
-              },
-              publishDate: item.fields.publishDate,
-              authors: item.fields.authors,
-              metaDescription: item.fields.metaDescription,
-              tags: item.fields.tags,
-              readTime: item.fields.readTime,
-            };
-          });
-        });
+          }`
+      );
+      return extractPostEntries(entries);
     },
   })
   .query("getPost", {
@@ -74,40 +47,17 @@ export const contentfulBlogPostRouter = createRouter()
       slug: z.union([z.string(), z.string().array()]),
     }),
     async resolve({ input, ctx }) {
-      return await ctx.contentful
-        .getEntries({
-          content_type: "post",
-          limit: 1,
-          "fields.slug": input.slug[0],
-        })
-        .then(
-          (res: {
-            items: {
-              fields: PostProps;
-            }[];
-          }) => {
-            return res.items.map((item) => {
-              if (item.fields?.pageBody) {
-                item.fields.readTime = getReadTime(JSON.stringify(item.fields?.pageBody));
+      const preview = false;
+      const entry = await ctx.graph.request(
+        `query{
+          postCollection(where: { slug: "${input.slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
+              items {
+                ${POST_GRAPHQL_FIELDS}
+                ${POST_ENTRY_GRAPHQL_FIELDS}
               }
-              return {
-                slug: item.fields.slug,
-                title: item.fields.title,
-                heroImage: {
-                  src: "https:" + item.fields.heroImage?.fields?.file?.url,
-                  alt: item.fields.heroImage?.fields?.title ?? "",
-                  width: item.fields.heroImage?.fields?.file?.details?.image?.width,
-                  height: item.fields.heroImage?.fields?.file?.details?.image?.height,
-                },
-                publishDate: item.fields.publishDate,
-                authors: item.fields.authors,
-                metaDescription: item.fields.metaDescription,
-                tags: item.fields.tags,
-                pageBody: item.fields.pageBody,
-                readTime: item.fields.readTime,
-              };
-            });
-          }
-        );
+            }
+          }`
+      );
+      return extractPost(entry);
     },
   });

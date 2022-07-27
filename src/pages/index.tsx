@@ -29,53 +29,42 @@ const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: 
         authors={data[0].authors}
       />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {data.map(
-          (
-            post: {
-              slug: string;
-              heroImage: JSX.IntrinsicAttributes & CardImageProps;
-              title: string;
-              readTime: number;
-              authors: { items: any[] };
-            },
-            index: number
-          ) => {
-            if (index > 0) {
-              return (
-                <div key={index} className="relative mb-4">
-                  <Link href={post.slug}>
-                    <a href={post.slug} className="group">
-                      <CardImage {...post.heroImage} setBackgroundImage={props.setBackgroundImage} />
-                      <h2 className="mt-2 text-center text-2xl font-bold">{post.title}</h2>
-                      {post.readTime && (
-                        <p className="flex items-center justify-center gap-2 text-center">
-                          <TimerIcon />
-                          {post.readTime} minute read
-                        </p>
-                      )}
+        {data.map((post: any, index: number) => {
+          if (index > 0) {
+            return (
+              <div key={index} className="relative mb-4">
+                <Link href={post.slug}>
+                  <a href={post.slug} className="group">
+                    <CardImage {...post.heroImage} setBackgroundImage={props.setBackgroundImage} />
+                    <h2 className="mt-2 text-center text-2xl font-bold">{post.title}</h2>
+                    {post.readTime && (
+                      <p className="flex items-center justify-center gap-2 text-center">
+                        <TimerIcon />
+                        {post.readTime} minute read
+                      </p>
+                    )}
 
-                      <div className="mt-4"></div>
-                      {post.authors?.map((author: any, index: React.Key | null | undefined) => {
-                        console.log(author);
-                        return (
-                          <p className="flex items-center justify-center gap-4 text-sm" key={index}>
-                            <Avatar.Root>
-                              <Avatar.Image
-                                className="my-0 w-12 rounded-full"
-                                src={author?.fields?.image?.fields?.file.url}
-                              ></Avatar.Image>
-                            </Avatar.Root>
-                            {author.fields.title}
-                          </p>
-                        );
-                      })}
-                    </a>
-                  </Link>
-                </div>
-              );
-            }
+                    <div className="mt-4"></div>
+                    {post.authors?.map((author: any, index: React.Key | null | undefined) => {
+                      console.log(author);
+                      return (
+                        <p className="flex items-center justify-center gap-4 text-sm" key={index}>
+                          <Avatar.Root>
+                            <Avatar.Image
+                              className="my-0 w-12 rounded-full"
+                              src={author?.fields?.image?.fields?.file.url}
+                            ></Avatar.Image>
+                          </Avatar.Root>
+                          {author.fields.title}
+                        </p>
+                      );
+                    })}
+                  </a>
+                </Link>
+              </div>
+            );
           }
-        )}
+        })}
       </div>
     </main>
   );

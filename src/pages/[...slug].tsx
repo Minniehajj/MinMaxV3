@@ -1,6 +1,5 @@
 import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import * as Avatar from "@radix-ui/react-avatar";
-import { ContentfulClient } from "../server/db/client";
 
 import { createSSGHelpers } from "@trpc/react/ssg";
 import { contentfulBlogPostRouter } from "../server/router/contentful-blog-post";
@@ -11,19 +10,21 @@ import Image from "next/future/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
 import { TimerIcon } from "@radix-ui/react-icons";
+import { GraphQLClient } from "graphql-request";
+import { extractPostSlugs } from "utils/extract";
 
 const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
-  const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data[0]);
-  console.log(data);
+  const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
+
   return (
-    <main className="">
+    <main>
       {data?.pageBody && (
         <div className="prose m-auto dark:prose-invert lg:prose-xl">
           <h1>{data.title}</h1>
           <Image
             {...data.heroImage}
-            alt={data.heroImage.alt}
             priority
+            alt={data.heroImage.alt}
             className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm dark:shadow-theme-blue"
           />
           <p className="flex items-center gap-2 text-sm">
@@ -31,7 +32,7 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
             {data.readTime} minute read
           </p>
           <div className="flex gap-8">
-            {data.authors?.items?.map((author, index) => {
+            {data.authorsCollection?.items?.map((author, index) => {
               return (
                 <p className="flex items-center gap-4 text-sm" key={index}>
                   <Avatar.Root>
@@ -43,7 +44,7 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
             })}
           </div>
           <div className="mb-12" />
-          {/* {documentToReactComponents(data.pageBody, RichText(data.pageBody))} */}
+          {documentToReactComponents(data.pageBody.json, RichText(data.pageBody))}
         </div>
       )}
     </main>
@@ -51,22 +52,22 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await ContentfulClient.getEntries({
-    content_type: "post",
-  });
+  let slugs: { params: { slug: string[] } }[] = [];
+  if (graph) {
+    const entry = await graph.request(
+      `query{
+        postCollection(where: { slug_exists: true }) {
+            items {
+              slug
+            }
+          }
+        }`
+    );
+    slugs = extractPostSlugs(entry);
+  }
+
   return {
-    paths: posts.items.map(
-      (post: {
-        fields: {
-          slug: string;
-        };
-      }) => ({
-        params: {
-          slug: [post.fields.slug],
-        },
-      })
-    ),
-    // https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
+    paths: slugs,
     fallback: "blocking",
   };
 };
