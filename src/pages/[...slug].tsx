@@ -9,12 +9,7 @@ import { createContext } from "../server/router/context";
 import React from "react";
 
 const Page = (props: { trpcState?: any; slug?: any }) => {
-  const { slug } = props;
-  // const postQuery = trpc.useQuery(["blogpost.getPost", { slug }]);
-  const [data, setData] = React.useState(
-    props.trpcState.json.queries[0].state.data[0]
-  );
-
+  const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data[0]);
   return (
     <>
       <Head>
@@ -23,10 +18,8 @@ const Page = (props: { trpcState?: any; slug?: any }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          {data.title}
-        </h1>
+      <main className="container mx-auto flex h-screen flex-col items-center justify-center p-4">
+        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">{data?.title}</h1>
       </main>
     </>
   );

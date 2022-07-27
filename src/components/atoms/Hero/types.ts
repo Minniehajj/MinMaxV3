@@ -1,4 +1,4 @@
-import { ImageProps } from "types/ImageProps";
+import { ImageProps } from "types";
 
 export type HeroProps = {
   title: string;

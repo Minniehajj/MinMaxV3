@@ -1,8 +1,6 @@
 import DecklistFormatter from "components/molecules/DecklistFormatter/DecklistFormatter";
 import { CardModel, Decklist as DecklistParser } from "mtg-decklist-parser2";
 import { Key, useEffect, useState } from "react";
-import getCard from "lib/getCard";
-import Image from "next/future/image";
 import { SampleHand } from "components/molecules/SampleHand";
 
 const Decklist = ({ list, title }: { list: string; title: string }) => {

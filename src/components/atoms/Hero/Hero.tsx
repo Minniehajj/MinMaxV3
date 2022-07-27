@@ -18,6 +18,7 @@ const Hero: FC<HeroProps> = ({ title, slug, image, description, setBackgroundIma
           {...image}
           priority
           src={image.url}
+          alt={image.title}
           className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm transition duration-100 ease-in-out hover:shadow-lg hover:ease-in dark:shadow-theme-blue"
         />
         <div className="prose top-1/2 right-20 mt-8 rounded bg-opacity-80 dark:prose-invert lg:absolute lg:mt-0 lg:bg-white lg:p-8 lg:dark:bg-black">

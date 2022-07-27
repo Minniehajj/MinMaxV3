@@ -5,15 +5,20 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import React from "react";
+import { ThemeProvider } from "next-themes";
+import { Layout } from "components/organisms/Layout";
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const MyApp: AppType = ({ Component, pageProps: { session, ...pageProps } }) => {
+  const [backgroundImage, setBackgroundImage] = React.useState("");
   return (
-    // <SessionProvider session={session}>
-    <Component {...pageProps} />
-    // </SessionProvider>
+    <SessionProvider session={session}>
+      <ThemeProvider attribute="class">
+        <Layout {...pageProps} backgroundImage={backgroundImage}>
+          <Component {...pageProps} setBackgroundImage={setBackgroundImage} />
+        </Layout>
+      </ThemeProvider>
+    </SessionProvider>
   );
 };
 

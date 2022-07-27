@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@contentful/rich-text-types": "^15.12.1",
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.1.0",
     "@radix-ui/react-accessible-icon": "^0.1.4",
@@ -23,11 +24,13 @@
     "@trpc/server": "^9.26.2",
     "axios": "^0.27.2",
     "contentful": "10.0.0-beta-v10.8",
+    "framer-motion": "^6.5.1",
     "mtg-decklist-parser": "^2.0.0",
     "mtg-decklist-parser2": "^2.0.13",
     "next": "12.2.3",
     "next-auth": "^4.10.2",
     "next-themes": "^0.1.1",
+    "pure-react-carousel": "^1.28.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "3.39.2",

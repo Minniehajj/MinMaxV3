@@ -2,7 +2,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import Image from "next/future/image";
 import { FC, memo, useEffect, useMemo, useState } from "react";
 import { CardToolTipProps } from "./types";
-import getCard from "lib/getCard";
+import getCard from "utils/getCard";
 import { Card } from "scryfall-api";
 
 let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
@@ -21,7 +21,7 @@ let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
     return () => {
       setImage("");
     };
-  }, [tooltipOpen]);
+  }, [tooltipOpen, name]);
   return (
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root open={tooltipOpen} onOpenChange={(open) => setTooltipOpen(open)}>
@@ -35,7 +35,7 @@ let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
           </button>
         </Tooltip.Trigger>
         <Tooltip.Content className="rounded-sm">
-          <div>{image && <Image src={image} width={248} height={346} />}</div>
+          <div>{image && <Image src={image} width={248} height={346} alt="test" />}</div>
           <Tooltip.Arrow />
         </Tooltip.Content>
       </Tooltip.Root>

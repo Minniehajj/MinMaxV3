@@ -5,7 +5,7 @@ const Link: FC<{
   children: any;
 }> = ({ href, children }) => {
   return (
-    <a href={href} target="_blank" className="inline-block">
+    <a href={href} target="_blank" rel="noreferrer" className="inline-block">
       {children}
     </a>
   );
