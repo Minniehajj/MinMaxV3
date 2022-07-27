@@ -15,6 +15,15 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    domains: ["images.ctfassets.net", "c1.scryfall.com"],
+  },
+  experimental: {
+    images: {
+      allowFutureImage: true,
+    },
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

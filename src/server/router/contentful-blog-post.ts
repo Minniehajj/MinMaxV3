@@ -31,11 +31,19 @@ export const contentfulBlogPostRouter = createRouter()
     },
   })
   .query("getAllPostsForHome", {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        page: z.number().nullish(),
+      })
+      .nullish(),
+    async resolve({ input, ctx }) {
       // return await ctx.prisma.example.findMany();
+      const page = input?.page ?? 0;
       return await ctx.contentful
         .getEntries({
           content_type: "post",
+          limit: 10,
+          skip: page * 10,
         })
         .then((res: { items: { fields: PostProps }[] }) => {
           return res.items.map((item) => {
@@ -45,7 +53,12 @@ export const contentfulBlogPostRouter = createRouter()
             return {
               slug: item.fields.slug,
               title: item.fields.title,
-              heroImage: item.fields.heroImage,
+              heroImage: {
+                src: "https:" + item.fields.heroImage?.fields?.file?.url,
+                alt: item.fields.heroImage?.fields?.title ?? "",
+                width: item.fields.heroImage?.fields?.file?.details?.image?.width,
+                height: item.fields.heroImage?.fields?.file?.details?.image?.height,
+              },
               publishDate: item.fields.publishDate,
               authors: item.fields.authors,
               metaDescription: item.fields.metaDescription,

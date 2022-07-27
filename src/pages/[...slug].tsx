@@ -1,4 +1,4 @@
-import type { GetStaticPaths, GetStaticPropsContext } from "next";
+import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import Head from "next/head";
 import { ContentfulClient } from "../server/db/client";
 import { trpc } from "../utils/trpc";
@@ -8,7 +8,7 @@ import superjson from "superjson";
 import { createContext } from "../server/router/context";
 import React from "react";
 
-const Page = (props: { trpcState?: any; slug?: any }) => {
+const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
   const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data[0]);
   return (
     <>

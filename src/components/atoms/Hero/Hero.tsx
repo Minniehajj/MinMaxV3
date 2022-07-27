@@ -6,19 +6,19 @@ import { TimerIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
 
 const Hero: FC<HeroProps> = ({ title, slug, image, description, setBackgroundImage, readTime, authors }) => {
+  // console.log(image);
   return (
     <Link href={slug}>
       <a
-        className="relative block lg:-mt-8"
-        onClick={() => setBackgroundImage(image.url)}
-        onMouseEnter={() => setBackgroundImage(image.url)}
-        onFocus={() => setBackgroundImage(image.url)}
+        className="relative block w-full lg:-mt-8"
+        onClick={() => setBackgroundImage(image.src)}
+        onMouseEnter={() => setBackgroundImage(image.src)}
+        onFocus={() => setBackgroundImage(image.src)}
       >
         <Image
           {...image}
+          alt={image.alt}
           priority
-          src={image.url}
-          alt={image.title}
           className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm transition duration-100 ease-in-out hover:shadow-lg hover:ease-in dark:shadow-theme-blue"
         />
         <div className="prose top-1/2 right-20 mt-8 rounded bg-opacity-80 dark:prose-invert lg:absolute lg:mt-0 lg:bg-white lg:p-8 lg:dark:bg-black">
@@ -33,9 +33,12 @@ const Hero: FC<HeroProps> = ({ title, slug, image, description, setBackgroundIma
               return (
                 <p className="flex items-center gap-4 text-sm" key={index}>
                   <Avatar.Root>
-                    <Avatar.Image className="my-0 w-12 rounded-full" src={author.image.url}></Avatar.Image>
+                    <Avatar.Image
+                      className="my-0 w-12 rounded-full"
+                      src={author?.fields?.image?.fields?.file.url}
+                    ></Avatar.Image>
                   </Avatar.Root>
-                  {author.title}
+                  {author.fields.title}
                 </p>
               );
             })}
