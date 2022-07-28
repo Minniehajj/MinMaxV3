@@ -25,7 +25,9 @@ let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
       <Tooltip.Root open={tooltipOpen} onOpenChange={(open) => setTooltipOpen(open)}>
         <Tooltip.Trigger asChild>
           <button
-            className={`${props.className} text-theme-blue-dark dark:text-theme-blue`}
+            className={`${props.className} text-theme-blue-dark dark:text-theme-blue ${
+              isLoading ? "hover:cursor-wait" : "hover:cursor-auto"
+            }`}
             onClick={() => {
               refetch();
               setTooltipOpen(!tooltipOpen);

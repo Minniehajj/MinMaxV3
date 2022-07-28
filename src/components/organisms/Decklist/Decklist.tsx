@@ -16,7 +16,7 @@ const Decklist = ({ list, title }: { list: string; title: string }) => {
         {DecklistFormatter({ list: decklist.deck, title: "Main Deck" })}
         {DecklistFormatter({ list: decklist.sideboard, title: "Sideboard" })}
       </div>
-      <button
+      {/* <button
         onClick={() => {
           newHand(!hand);
         }}
@@ -25,7 +25,7 @@ const Decklist = ({ list, title }: { list: string; title: string }) => {
       </button>
       <div>
         <div className="flex flex-wrap gap-4">{SampleHand(decklist, hand)}</div>
-      </div>
+      </div> */}
     </div>
   );
 };

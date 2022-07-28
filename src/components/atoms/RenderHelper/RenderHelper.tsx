@@ -19,7 +19,9 @@ export const RenderAsset =
     switch (asset.contentType) {
       case "image/png":
       case "image/jpeg":
-        return <Image src={asset.url} width={asset.width} height={asset.height} alt={asset.title} quality={75} />;
+        return (
+          <Image {...asset} src={asset.url} width={asset.width} height={asset.height} alt={asset.title} quality={75} />
+        );
       default:
         return <></>;
     }
