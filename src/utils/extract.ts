@@ -15,6 +15,11 @@ export function extractPost(fetchResponse: { postCollection: { items: PostProps[
   return post;
 }
 
+export function extractAuthors(fetchResponse: { authorCollection: { items: PostProps[] } }) {
+  const post = fetchResponse.authorCollection.items;
+  return post;
+}
+
 export function extractPostEntries(fetchResponse: { postCollection: { items: PostProps[] } }) {
   const posts = fetchResponse.postCollection.items;
   return posts.map((post) => {

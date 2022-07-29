@@ -58,7 +58,7 @@ export const RenderBlock =
     switch (asset.nodeType) {
       case "paragraph":
         const block = asset.content.map((child: JSX.IntrinsicAttributes & BodyProps, index: Key | null | undefined) => {
-          return <Body key={index} {...child} />;
+          return <Body  {...child} key={index}/>;
         });
         return <p>{block}</p>;
       default:

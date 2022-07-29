@@ -12,6 +12,7 @@ import { RichText } from "components/molecules/RichText";
 import { TimerIcon } from "@radix-ui/react-icons";
 import { extractPostSlugs } from "utils/extract";
 import { graph } from "server/db/client";
+
 const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
   const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
 
@@ -81,7 +82,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export async function getStaticProps(context: GetStaticPropsContext) {
+export const getStaticProps = async (context: GetStaticPropsContext) => {
   const ssg = createSSGHelpers({
     router: contentfulBlogPostRouter,
     ctx: await createContext(),
@@ -105,6 +106,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     },
     revalidate: 1,
   };
-}
+};
 
 export default Page;

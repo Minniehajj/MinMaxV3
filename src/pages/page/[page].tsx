@@ -16,7 +16,7 @@ const PaginatedBlogPage = (props: { trpcState?: any; slug?: any; setBackgroundIm
   return (
     <main>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {data.map(
+        {data?.map(
           (
             post: {
               slug: string;
@@ -29,7 +29,7 @@ const PaginatedBlogPage = (props: { trpcState?: any; slug?: any; setBackgroundIm
           ) => {
             return (
               <div key={index} className="relative mb-4">
-                <Link href={post.slug}>
+                <Link href={"/" + post.slug}>
                   <a href={post.slug} className="group">
                     <CardImage src={post.heroImage} alt={post.title} setBackgroundImage={props.setBackgroundImage} />
                     <h2 className="mt-2 text-center text-2xl font-bold">{post.title}</h2>

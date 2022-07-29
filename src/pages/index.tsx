@@ -3,7 +3,7 @@ import type { GetStaticPropsContext, NextPage } from "next";
 import { contentfulBlogPostRouter } from "server/router/contentful-blog-post";
 import superjson from "superjson";
 import { createContext } from "../server/router/context";
-import React from "react";
+import React, { Key } from "react";
 import { Hero } from "components/atoms/Hero";
 import Link from "next/link";
 import { CardImage, CardImageProps } from "components/atoms/CardImage";
@@ -26,7 +26,7 @@ const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: 
         }}
         description={data[0].metaDescription}
         readTime={data[0].readTime}
-        authors={data[0].authors}
+        authors={data[0].authorsCollection.items}
       />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {data.map((post: any, index: number) => {
@@ -45,20 +45,24 @@ const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: 
                     )}
 
                     <div className="mt-4"></div>
-                    {post.authors?.map((author: any, index: React.Key | null | undefined) => {
-                      console.log(author);
-                      return (
-                        <p className="flex items-center justify-center gap-4 text-sm" key={index}>
-                          <Avatar.Root>
-                            <Avatar.Image
-                              className="my-0 w-12 rounded-full"
-                              src={author?.fields?.image?.fields?.file.url}
-                            ></Avatar.Image>
-                          </Avatar.Root>
-                          {author.fields.title}
-                        </p>
-                      );
-                    })}
+                    {post.authorsCollection.items?.map(
+                      (
+                        author: {
+                          image: { url: string | undefined };
+                          title: string;
+                        },
+                        index: Key
+                      ) => {
+                        return (
+                          <p className="flex items-center justify-center gap-4 text-sm" key={index}>
+                            <Avatar.Root>
+                              <Avatar.Image className="my-0 w-12 rounded-full" src={author.image.url}></Avatar.Image>
+                            </Avatar.Root>
+                            {author.title}
+                          </p>
+                        );
+                      }
+                    )}
                   </a>
                 </Link>
               </div>

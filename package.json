@@ -24,6 +24,7 @@
     "@trpc/react": "^9.26.2",
     "@trpc/server": "^9.26.2",
     "axios": "^0.27.2",
+    "bun-framework-next": "^12.1.5",
     "contentful": "10.0.0-beta-v10.8",
     "framer-motion": "^6.5.1",
     "graphql": "^16.5.0",

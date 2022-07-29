@@ -24,6 +24,7 @@ specifiers:
   '@types/react-dom': 18.0.5
   autoprefixer: ^10.4.7
   axios: ^0.27.2
+  bun-framework-next: ^12.1.5
   contentful: 10.0.0-beta-v10.8
   eslint: 8.18.0
   eslint-config-next: 12.2.3
@@ -72,6 +73,7 @@ dependencies:
   '@trpc/react': 9.26.2_4zadt2mtfbx7275mbcwrjz2noe
   '@trpc/server': 9.26.2
   axios: 0.27.2
+  bun-framework-next: 12.1.5_next@12.2.3
   contentful: 10.0.0-beta-v10.8
   framer-motion: 6.5.1_biqbaboplfbrettd7655fr4n2y
   graphql: 16.5.0
@@ -2630,6 +2632,15 @@ packages:
       ieee754: 1.2.1
     dev: false
 
+  /bun-framework-next/12.1.5_next@12.2.3:
+    resolution: {integrity: sha512-/Izqn2ce6RHxPWXUmjX3uYWqC+cThiyNplVhPKIjcokqoPidhphn1ibXCyWvsMRkypdRO1TN/JsHa6S/OC1wtw==}
+    peerDependencies:
+      next: ^12
+    dependencies:
+      next: 12.2.3_biqbaboplfbrettd7655fr4n2y
+      react-is: 17.0.2
+    dev: false
+
   /call-bind/1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
     dependencies:
@@ -4654,6 +4665,10 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  /react-is/17.0.2:
+    resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+    dev: false
 
   /react-query/3.39.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-F6hYDKyNgDQfQOuR1Rsp3VRzJnWHx6aRnnIZHMNGGgbL3SBgpZTDg8MQwmxOgpCAoqZJA+JSNCydF1xGJqKOCA==}
