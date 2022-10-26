@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import Youtube from "react-youtube";
-import Image from "next/future/image";
+import Image from "next/image";
 
 import { Decklist } from "../../organisms/Decklist";
 import TweetEmbed from "../TweetEmbed/TweetEmbed";

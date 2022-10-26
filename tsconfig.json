@@ -15,10 +15,10 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "baseUrl": "./src",
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "./src",
     "noUncheckedIndexedAccess": true,
     "paths": {
       "@/public/*": [
@@ -28,10 +28,10 @@
   },
   "include": [
     "next-env.d.ts",
-    "next-auth.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.js"
+    "**/*.cjs",
+    "**/*.mjs"
   ],
   "exclude": [
     "node_modules"

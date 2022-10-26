@@ -1,4 +1,4 @@
-import Image from "next/future/image";
+import Image from "next/image";
 import { FC, useState } from "react";
 import { CardImageProps } from "./types";
 

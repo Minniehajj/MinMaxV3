@@ -1,7 +1,7 @@
 import getCard from "utils/getCard";
 import parseList from "utils/parseList";
 import { Decklist, CardModel } from "mtg-decklist-parser2";
-import Image from "next/future/image";
+import Image from "next/image";
 import { Key, useEffect, useState } from "react";
 
 const SampleHand = (decklist: Decklist<CardModel>, hand: unknown) => {

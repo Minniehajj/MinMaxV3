@@ -2,23 +2,20 @@ import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
 import * as Avatar from "@radix-ui/react-avatar";
 
 import { createSSGHelpers } from "@trpc/react/ssg";
-import { contentfulBlogPostRouter } from "../server/router/contentful-blog-post";
 import superjson from "superjson";
-import { createContext } from "../server/router/context";
 import React from "react";
-import Image from "next/future/image";
+import Image from "next/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
 import { TimerIcon } from "@radix-ui/react-icons";
 import { extractPostSlugs } from "utils/extract";
 import { graph } from "server/db/client";
 
-const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
-  const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
+const Page: NextPage = () => {  
 
   return (
     <main>
-      {data?.pageBody && (
+      {/* {data?.pageBody && (
         <div className="prose m-auto dark:prose-invert lg:prose-xl">
           <h1>{data.title}</h1>
           <Image
@@ -58,54 +55,9 @@ const Page: NextPage = (props: { trpcState?: any; slug?: any }) => {
           <div className="mb-12" />
           {documentToReactComponents(data.pageBody.json, RichText(data.pageBody))}
         </div>
-      )}
+      )} */}
     </main>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  let slugs: { params: { slug: string[] } }[] = [];
-  const entry = await graph.request(
-    `query{
-        postCollection(where: { slug_exists: true }) {
-            items {
-              slug
-            }
-          }
-        }`
-  );
-  slugs = extractPostSlugs(entry);
-
-  return {
-    paths: slugs,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-  const ssg = createSSGHelpers({
-    router: contentfulBlogPostRouter,
-    ctx: await createContext(),
-    transformer: superjson, // optional - adds superjson serialization
-  });
-  // console.log(context);
-  const slug = context?.params?.slug || [];
-  // return {
-  //   props: {},
-  //   revalidate: 1,
-  // };
-  // prefetch `post.byId`
-  await ssg.fetchQuery("getPost", {
-    slug,
-  });
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      slug,
-    },
-    revalidate: 1,
-  };
 };
 
 export default Page;

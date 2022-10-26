@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
-  mode: "jit",
-  content: ["./src/**/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
     extend: {
@@ -18,19 +15,19 @@ module.exports = {
         },
       },
       animation: ['hover', 'group-hover'],
-      fontFamily:{
+      fontFamily: {
         'sans': ['Nunito Sans', ...defaultTheme.fontFamily.sans],
       }
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),    
+    require('@tailwindcss/typography'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/forms'),
     require('tailwind-scrollbar-hide'),
     require('tailwind-scrollbar'),
-    require("tailwindcss-radix")({      
+    require("tailwindcss-radix")({
       variantPrefix: "rdx",
     })
   ],
-}
+};

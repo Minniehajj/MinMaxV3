@@ -1,25 +1,18 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
-import Image from "next/future/image";
-import { FC, memo, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { FC, memo, useState } from "react";
 import { CardToolTipProps } from "./types";
 import getCard from "utils/getCard";
 import { Card } from "scryfall-api";
 import { trpc } from "utils/trpc";
 
-let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {
-  const [image, setImage] = useState<any>("");
+let CardToolTip: FC<CardToolTipProps> = ({ amount, name, ...props }) => {  
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
-  const { data, refetch, isLoading } = trpc.useQuery(
-    [
-      "card.getCard",
-      {
-        card: name,
-      },
-    ],
-    {
-      enabled: !!tooltipOpen,
-    }
-  );
+  // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
+  const { data, refetch, isLoading } = trpc.card.getCard.useQuery({ card: name }, {
+    enabled: !!tooltipOpen,
+    trpc:{}
+  });
   return (
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root open={tooltipOpen} onOpenChange={(open) => setTooltipOpen(open)}>

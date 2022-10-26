@@ -1,5 +1,7 @@
+/* eslint-disable no-var */
 // src/server/db/client.ts
 import { PrismaClient } from "@prisma/client";
+import { env } from "../../env/server.mjs";
 import { GraphQLClient } from "graphql-request";
 
 declare global {
@@ -10,7 +12,8 @@ declare global {
 export const prisma =
   global.prisma ||
   new PrismaClient({
-    log: ["query"],
+    log:
+      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
 
 export const graph =
@@ -22,7 +25,8 @@ export const graph =
     },
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (env.NODE_ENV !== "production") {
   global.prisma = prisma;
   global.graph = graph;
 }
+
