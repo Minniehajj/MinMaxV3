@@ -6,18 +6,17 @@ import { createContext } from "../server/router/context";
 import React, { Key } from "react";
 import { Hero } from "components/atoms/Hero";
 import Link from "next/link";
-import { CardImage, CardImageProps } from "components/atoms/CardImage";
+import { CardImage } from "components/atoms/CardImage";
 import { TimerIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
-import { UrlObject } from "url";
-const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: string) => void }) => {
+const Home = () => {
   // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
   // const posts = trpc.useQuery(["blogpost.getAllSlugs"]);
-  const { data } = props.trpcState.json.queries[0].state;
+  // const { data } = props.trpcState.json.queries[0].state;
   // const [data, setData] = React.useState(props.trpcState.json.queries[0].state.data);
   return (
     <main className="container mx-auto flex h-screen w-full flex-col p-4">
-      <Hero
+      {/* <Hero
         title={data[0].title}
         slug={data[0].slug}
         setBackgroundImage={props.setBackgroundImage}
@@ -69,26 +68,7 @@ const Home = (props: { trpcState?: any; slug?: any; setBackgroundImage: (image: 
             );
           }
         })}
-      </div>
+      </div> */}
     </main>
   );
 };
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-  const ssg = createSSGHelpers({
-    router: contentfulBlogPostRouter,
-    ctx: await createContext(),
-    transformer: superjson, // optional - adds superjson serialization
-  });
-  const slug = context?.params?.slug || [];
-  await ssg.fetchQuery("getAllPostsForHome");
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      slug,
-    },
-    revalidate: 1,
-  };
-}
-export default Home;
