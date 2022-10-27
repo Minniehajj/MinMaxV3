@@ -15,7 +15,7 @@ import { TimerIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
-
+import { graph } from "server/db/client";
 const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { slug } = props;
   const postQuery = trpc.blogPost.getPost.useQuery({ slug });
@@ -80,18 +80,17 @@ export default Page;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   let slugs: { params: { slug: string[] } }[] = [];
-  if (graph) {
-    const entry = await graph.request(
-      `query{
+
+  const entry = await graph.request(
+    `query{
           postCollection(where: { slug_exists: true }) {
               items {
                 slug
               }
             }
           }`
-    );
-    slugs = extractPostSlugs(entry);
-  }
+  );
+  slugs = extractPostSlugs(entry);
 
   return {
     paths: slugs,
