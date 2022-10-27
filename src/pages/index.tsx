@@ -1,6 +1,6 @@
 import { CardImage } from "components/atoms/CardImage";
 import { Hero } from "components/atoms/Hero";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import { InferGetStaticPropsType } from "next";
 import Link from "next/link";
 import React, { Key } from "react";
 import { createContextInner } from "server/trpc/context";
@@ -17,14 +17,16 @@ import { trpc } from "utils/trpc";
 interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {
   setBackgroundImage: (image: string) => void;
 }
+
 const Home = (props: PageProps) => {
-  const postsQuery = trpc.blogPost.getPostsPaginated.useQuery({ page: "1" });
-
-  if (postsQuery.status !== "success") {
-    return <>Loading...</>;
+  const postsQuery = trpc.blogPost.getPostsPaginated.useQuery();
+  const { data, isLoading, error } = postsQuery;
+  if (!data || isLoading) {
+    return <div>Loading...</div>;
   }
-  const { data } = postsQuery;
-
+  if (error) {
+    return <div>{error.message}</div>;
+  }
   return (
     <main className="container mx-auto flex h-screen w-full flex-col p-4">
       {data.length > 0 && data[0] && (
@@ -99,22 +101,19 @@ const Home = (props: PageProps) => {
 
 export default Home;
 
-export async function getStaticProps(
-  context: GetStaticPropsContext<{ slug: string }>
-) {
+export const getStaticProps = async () => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
-    transformer: superjson, // optional - adds superjson serialization
+    transformer: superjson,
   });
-  const slug = context?.params?.slug || [];
 
-  await ssg.blogPost.getPostsPaginated.prefetch();
+  await ssg.blogPost.getPostsPaginated.fetch();
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
-      slug,
     },
     revalidate: 1,
   };
-}
+};
