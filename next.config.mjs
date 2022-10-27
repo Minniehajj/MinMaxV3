@@ -15,8 +15,16 @@ function defineNextConfig(config) {
 }
 
 export default defineNextConfig({
-  reactStrictMode: true,
-  experimental: {
-    appDir: true,
+  reactStrictMode: true,  
+  images: {
+    formats: ["image/avif", "image/webp"],
+    domains: ["images.ctfassets.net", "c1.scryfall.com"],
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
   },
 });

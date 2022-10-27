@@ -4,10 +4,8 @@ import { TaxonomyLinkProps } from "./types";
 
 const TaxonomyLink: FC<TaxonomyLinkProps> = (props) => {
   return (
-    <Link href={"/" + props.slug} passHref>
-      <a {...props} href={"/" + props.slug}>
-        {props.title}
-      </a>
+    <Link href={"/" + props.slug} {...props}>
+      {props.title}
     </Link>
   );
 };

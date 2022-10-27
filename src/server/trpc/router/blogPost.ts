@@ -34,7 +34,7 @@ export const blogPostRouter = router({
       const parsedPageNumber = parseInt(page as string, 10);
       const queryLimit = parsedPageNumber === 1 ? 10 : 9;
       const skipMultiplier = parsedPageNumber === 1 ? 0 : parsedPageNumber - 1;
-      const skip = skipMultiplier > 0 ? queryLimit * skipMultiplier : 0;
+      const skip = skipMultiplier > 0 ? queryLimit * skipMultiplier : 0;      
       const entries = await ctx.graph.request(
         `query{
             postCollection(limit: ${queryLimit}, skip: ${page === 1 ? skip : skip + 1}, order: publishDate_DESC) {

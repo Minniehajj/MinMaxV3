@@ -4,10 +4,10 @@ import getReadTime from "./getReadTime";
 export function extractPost(fetchResponse: { postCollection: { items: PostProps[] } }) {
   const post = fetchResponse.postCollection.items[0];
   if (post)
-    post.heroImage = {
+    post.heroImage = {    
+      ...post.heroImage,
       alt: post.heroImage.title,
       src: post.heroImage.url,
-      ...post.heroImage,
     };
   if (post?.pageBody?.json) {
     post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));
@@ -23,10 +23,10 @@ export function extractAuthors(fetchResponse: { authorCollection: { items: PostP
 export function extractPostEntries(fetchResponse: { postCollection: { items: PostProps[] } }) {
   const posts = fetchResponse.postCollection.items;
   return posts.map((post) => {
-    post.heroImage = {
+    post.heroImage = {      
+      ...post.heroImage,
       alt: post.heroImage.title,
       src: post.heroImage.url,
-      ...post.heroImage,
     };
     if (post?.pageBody?.json) {
       post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));

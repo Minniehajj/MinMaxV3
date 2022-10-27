@@ -9,11 +9,11 @@ export type PostProps = {
     url: string;
     width: number;
     height: number;
-    src?: string;
-    alt?: string;
+    src: string;
+    alt: string;
   };
   publishDate: string;
-  authors: {
+  authorsCollection: {
     items: {
       title: string;
       twitter: string;

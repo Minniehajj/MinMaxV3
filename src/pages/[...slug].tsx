@@ -1,18 +1,7 @@
 import type { GetStaticPaths, GetStaticPropsContext, NextPage } from "next";
-import * as Avatar from "@radix-ui/react-avatar";
-
-import { createSSGHelpers } from "@trpc/react/ssg";
-import superjson from "superjson";
 import React from "react";
-import Image from "next/image";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { RichText } from "components/molecules/RichText";
-import { TimerIcon } from "@radix-ui/react-icons";
-import { extractPostSlugs } from "utils/extract";
-import { graph } from "server/db/client";
 
-const Page: NextPage = () => {  
-
+const Page: NextPage = () => {
   return (
     <main>
       {/* {data?.pageBody && (

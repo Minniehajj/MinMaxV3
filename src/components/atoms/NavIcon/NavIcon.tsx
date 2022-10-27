@@ -9,10 +9,11 @@ const NavIcon: FC<NavIconProps> = ({ Icon, link }) => {
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
           <span>
-            <Link href={link.href} passHref>
-              <a {...link} className="group relative flex w-12 flex-col items-center justify-center sm:w-20">
-                <Icon className="mb-1 h-5 w-5 group-hover:animate-bounce group-hover:text-theme-pink-dark dark:group-hover:text-theme-pink" />
-              </a>
+            <Link
+              {...link}
+              className="group relative flex w-12 flex-col items-center justify-center sm:w-20"
+            >
+              <Icon className="mb-1 h-5 w-5 group-hover:animate-bounce group-hover:text-theme-pink-dark dark:group-hover:text-theme-pink" />
             </Link>
           </span>
         </Tooltip.Trigger>
