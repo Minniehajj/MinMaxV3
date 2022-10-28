@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BLOCKS, MARKS, INLINES } from "@contentful/rich-text-types";
 import { Body } from "components/atoms/Body";
 import { Link } from "components/atoms/Link";
-import { RenderAsset, RenderEntry, RenderBlock } from "components/atoms/RenderHelper";
+import {
+  RenderAsset,
+  RenderEntry,
+  RenderBlock,
+} from "components/atoms/RenderHelper";
 
 const RichText = (post: any) => {
   // create an asset map
@@ -34,7 +39,9 @@ const RichText = (post: any) => {
       [BLOCKS.HEADING_5]: (node: any, children: any) => <h5>{children}</h5>,
       [BLOCKS.HEADING_6]: (node: any, children: any) => <h6>{children}</h6>,
       [BLOCKS.LIST_ITEM]: (node: any, children: any) => <li>{children}</li>,
-      [BLOCKS.QUOTE]: (node: any, children: any) => <blockquote>{children}</blockquote>,
+      [BLOCKS.QUOTE]: (node: any, children: any) => (
+        <blockquote>{children}</blockquote>
+      ),
       [BLOCKS.UL_LIST]: (node: any, children: any) => <ul>{children}</ul>,
       [BLOCKS.OL_LIST]: (node: any, children: any) => <ol>{children}</ol>,
       [BLOCKS.HR]: (node: any, children: any) => <hr />,

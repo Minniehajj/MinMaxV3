@@ -16,6 +16,7 @@ import * as Avatar from "@radix-ui/react-avatar";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
 import { graph } from "server/db/client";
+import { MarkdownParser } from "components/atoms/MarkdownParser";
 
 const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { slug } = props;
@@ -69,7 +70,7 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
           </div>
           <div className="mb-12" />
           {data.body ? (
-            <div>hello world</div>
+            <MarkdownParser>{data.body}</MarkdownParser>
           ) : (
             documentToReactComponents(
               data.pageBody.json,
