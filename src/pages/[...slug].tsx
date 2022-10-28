@@ -27,9 +27,10 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (error) {
     return <div>{error.message}</div>;
   }
+  console.log(data.body);
   return (
     <main>
-      {data?.pageBody && (
+      {(data?.pageBody || data.body) && (
         <div className="prose m-auto dark:prose-invert lg:prose-xl">
           <h1>{data.title}</h1>
           <Image
@@ -67,9 +68,13 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
             )}
           </div>
           <div className="mb-12" />
-          {documentToReactComponents(
-            data.pageBody.json,
-            RichText(data.pageBody)
+          {data.body ? (
+            <div>hello world</div>
+          ) : (
+            documentToReactComponents(
+              data.pageBody.json,
+              RichText(data.pageBody)
+            )
           )}
         </div>
       )}

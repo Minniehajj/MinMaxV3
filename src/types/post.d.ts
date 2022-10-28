@@ -30,6 +30,7 @@ export type PostProps = {
       slug: string;
     }[];
   };
+  body?: string;
   pageBody: {
     json: any;
     links: {
