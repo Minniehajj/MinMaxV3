@@ -38,7 +38,9 @@ const Nav = () => {
                 link={{ href: "/search", title: "Search" }}
               />
             </li>
-            <li>{/* <ThemeToggleButton /> */}</li>
+            <li>
+              <ThemeToggleButton />
+            </li>
           </ul>
         </div>
       </nav>

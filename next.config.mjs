@@ -27,4 +27,7 @@ export default defineNextConfig({
     });
     return config;
   },
+  experimental: {
+    appDir:false,
+  }
 });

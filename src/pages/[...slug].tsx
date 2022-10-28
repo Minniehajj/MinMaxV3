@@ -16,6 +16,7 @@ import * as Avatar from "@radix-ui/react-avatar";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RichText } from "components/molecules/RichText";
 import { graph } from "server/db/client";
+
 const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { slug } = props;
   const postQuery = trpc.blogPost.getPost.useQuery({ slug });
@@ -105,12 +106,17 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     transformer: superjson,
   });
   const slug = context?.params?.slug || [];
+  if (slug.length === 0) {
+    return {
+      notFound: true,
+    };
+  }
   await ssg.blogPost.getPost.fetch({ slug });
 
   return {
     props: {
       trpcState: ssg.dehydrate(),
-      slug,
+      slug: slug,
     },
     revalidate: 1,
   };

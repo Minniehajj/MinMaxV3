@@ -12,7 +12,7 @@ export function extractPost(fetchResponse: { postCollection: { items: PostProps[
   if (post?.pageBody?.json) {
     post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));
   }
-  return post;
+  return post ?? null;
 }
 
 export function extractAuthors(fetchResponse: { authorCollection: { items: PostProps[] } }) {
