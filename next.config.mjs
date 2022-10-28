@@ -18,7 +18,7 @@ export default defineNextConfig({
   reactStrictMode: true,  
   images: {
     formats: ["image/avif", "image/webp"],
-    domains: ["images.ctfassets.net", "c1.scryfall.com"],
+    domains: ["images.ctfassets.net", "c1.scryfall.com", "cards.scryfall.io"],
   },
   webpack(config) {
     config.module.rules.push({

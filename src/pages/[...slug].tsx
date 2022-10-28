@@ -69,7 +69,7 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
             )}
           </div>
           <div className="mb-12" />
-          {data.body ? (
+          {data.body && !data?.pageBody?.json ? (
             <MarkdownParser>{data.body}</MarkdownParser>
           ) : (
             documentToReactComponents(
