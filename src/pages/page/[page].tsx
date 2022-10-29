@@ -1,12 +1,10 @@
 import { CardImage } from "components/atoms/CardImage";
-import { Hero } from "components/atoms/Hero";
 import Link from "next/link";
 import React, { Key } from "react";
 import { graph } from "server/db/client";
 import { createContextInner } from "server/trpc/context";
 import { appRouter } from "server/trpc/router/_app";
 import superjson from "superjson";
-import { PostProps } from "types";
 import { trpc } from "utils/trpc";
 
 import * as Avatar from "@radix-ui/react-avatar";
@@ -15,8 +13,7 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 
 import type {
   GetStaticPaths,
-  GetStaticProps,
-  GetStaticPropsContext,
+  GetStaticProps,  
   InferGetStaticPropsType,
 } from "next";
 interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {

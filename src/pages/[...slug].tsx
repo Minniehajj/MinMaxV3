@@ -28,7 +28,6 @@ const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (error) {
     return <div>{error.message}</div>;
   }
-  console.log(data.body);
   return (
     <main>
       {(data?.pageBody || data.body) && (

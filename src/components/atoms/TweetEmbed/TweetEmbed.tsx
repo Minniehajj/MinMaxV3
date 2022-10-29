@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 import { Tweet } from "react-twitter-widgets";
 import { useMediaQuery } from "usehooks-ts";

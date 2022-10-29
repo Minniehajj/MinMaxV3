@@ -5,12 +5,21 @@ import Image from "next/image";
 import { Decklist } from "../../organisms/Decklist";
 import TweetEmbed from "../TweetEmbed/TweetEmbed";
 import { Body, BodyProps } from "../Body";
-import { Link } from "../Link";
-import { Key } from "react";
+import React, { Key } from "react";
 import getYoutubeId from "../../../utils/getYoutubeId";
 
+type assetMapType = Map<
+  number,
+  {
+    contentType: string;
+    url: string;
+    width: number;
+    height: number;
+    title: string;
+  }
+>;
 export const RenderAsset =
-  (assetMap: any): any =>
+  (assetMap: assetMapType) =>
   (node: { data: { target: { sys: { id: number } } } }) => {
     const asset = assetMap.get(node.data.target.sys.id);
     if (!asset) {
@@ -20,16 +29,35 @@ export const RenderAsset =
       case "image/png":
       case "image/jpeg":
         return (
-          <Image {...asset} src={asset.url} width={asset.width} height={asset.height} alt={asset.title} quality={75} />
+          <Image
+            {...asset}
+            src={asset.url}
+            width={asset.width}
+            height={asset.height}
+            alt={asset.title}
+            quality={75}
+          />
         );
       default:
         return <></>;
     }
   };
 
+type entryMapType = Map<
+  number,
+  {
+    fields: { title: string };
+    __typename: string;
+    url: string;
+    list: string;
+    title: string;
+    tweetId: string;
+  }
+>;
+
 RenderAsset.displayName = "RenderAsset";
 export const RenderEntry =
-  (entryMap: any): any =>
+  (entryMap: entryMapType) =>
   (node: { data: { target: { sys: { id: number } } } }) => {
     const entry = entryMap.get(node.data.target.sys.id);
     if (!entry) {
@@ -49,17 +77,25 @@ export const RenderEntry =
   };
 
 export const RenderBlock =
-  (blockMap: any): any =>
-  (node: any) => {
+  () =>
+  (node: {
+    nodeType: string;
+    content: JSX.IntrinsicAttributes & BodyProps[];
+  }) => {
     const asset = node;
     if (!asset) {
       return <></>;
     }
     switch (asset.nodeType) {
       case "paragraph":
-        const block = asset.content.map((child: JSX.IntrinsicAttributes & BodyProps, index: Key | null | undefined) => {
-          return <Body  {...child} key={index}/>;
-        });
+        const block = asset.content.map(
+          (
+            child: JSX.IntrinsicAttributes & BodyProps,
+            index: Key | null | undefined
+          ) => {
+            return <Body {...child} key={index} />;
+          }
+        );
         return <p>{block}</p>;
       default:
         return <></>;

@@ -1,8 +1,9 @@
 export type BodyProps = {
-  children: string;
-  node?: any;
+  children: string;  
   nodeType?: string;
-  data?: any;
+  data?: {
+    uri?: string;
+  };
   value: string;
   content: {
     value: string;

@@ -1,8 +1,8 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 const Link: FC<{
   href: string;
-  children: any;
+  children: React.ReactNode;
 }> = ({ href, children }) => {
   return (
     <a href={href} target="_blank" rel="noreferrer" className="inline-block">

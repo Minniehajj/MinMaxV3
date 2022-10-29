@@ -1,3 +1,5 @@
+import { NodeData } from "components/molecules/RichText/types";
+
 export type PostProps = {
   slug: string;
   title: string;
@@ -31,23 +33,6 @@ export type PostProps = {
     }[];
   };
   body?: string;
-  pageBody: {
-    json: any;
-    links: {
-      assets: {
-        block: {
-          sys: {
-            id: string;
-          };
-          title: string;
-          url: string;
-          description: string;
-          contentType: string;
-          width: number;
-          height: number;
-        };
-      };
-    };
-  };
+  pageBody: NodeData;
   readTime: number;
 };

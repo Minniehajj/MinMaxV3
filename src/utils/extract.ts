@@ -9,8 +9,12 @@ export function extractPost(fetchResponse: { postCollection: { items: PostProps[
       alt: post.heroImage.title,
       src: post.heroImage.url,
     };
+  
   if (post?.pageBody?.json) {
     post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));
+  }
+  if (post?.body) {
+    post.readTime = getReadTime(JSON.stringify(post?.body));
   }
   return post ?? null;
 }
@@ -29,11 +33,13 @@ export function extractPostEntries(fetchResponse: { postCollection: { items: Pos
       src: post.heroImage.url,
     };
     if (post?.pageBody?.json) {
-      post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));
-      return post;
-    } else {
-      return post;
+      post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));      
     }
+    if (post?.body) {
+      post.readTime = getReadTime(JSON.stringify(post?.body));
+    }
+    
+    return post;    
   });
 }
 export function extractPostSlugs(fetchResponse: { postCollection: { items: PostProps[] } }) {

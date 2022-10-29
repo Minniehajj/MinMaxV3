@@ -32,6 +32,7 @@ tagsCollection {
 pageBody {
   json
 }
+body
 `;
 
 export const POST_ENTRY_GRAPHQL_FIELDS = `
