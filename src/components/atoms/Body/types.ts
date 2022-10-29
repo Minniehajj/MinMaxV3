@@ -1,11 +1,13 @@
+import React from "react";
+
 export type BodyProps = {
-  children: string;  
+  children: React.ReactNode;  
   nodeType?: string;
   data?: {
     uri?: string;
   };
-  value: string;
-  content: {
-    value: string;
+  value?: string;
+  content?: {
+    value?: string;
   }[];
 };
