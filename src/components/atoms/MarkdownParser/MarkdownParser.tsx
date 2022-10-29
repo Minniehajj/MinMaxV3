@@ -1,7 +1,8 @@
 import Markdown from "markdown-to-jsx";
 import { MarkdownParserProps } from "./types";
 
-const Body = ({ children = "" }: MarkdownParserProps) => {
+const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
+  
   return (
     <article className="prose m-auto dark:prose-invert lg:prose-xl">
       <Markdown>{children}</Markdown>
@@ -9,4 +10,4 @@ const Body = ({ children = "" }: MarkdownParserProps) => {
   );
 };
 
-export default Body;
+export default MarkdownParser;

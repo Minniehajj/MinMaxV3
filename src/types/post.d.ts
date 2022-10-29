@@ -33,6 +33,6 @@ export type PostProps = {
     }[];
   };
   body?: string;
-  pageBody: NodeData;
+  pageBody:NodeData;
   readTime: number;
 };

@@ -1,13 +1,15 @@
+import { BLOCKS, Document } from "@contentful/rich-text-types";
+
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface NodeData {
-    json:  JSON;
+    json:  Document;
     links: Links;
 }
 
 export interface JSON {
     data:     JSONData;
     content:  JSONContent[];
-    nodeType: string;
+    nodeType: BLOCKS;
 }
 
 export interface JSONContent {

@@ -5,21 +5,11 @@ import Image from "next/image";
 import { Decklist } from "../../organisms/Decklist";
 import TweetEmbed from "../TweetEmbed/TweetEmbed";
 import { Body, BodyProps } from "../Body";
-import React, { Key } from "react";
+import { Key } from "react";
 import getYoutubeId from "../../../utils/getYoutubeId";
 
-type assetMapType = Map<
-  number,
-  {
-    contentType: string;
-    url: string;
-    width: number;
-    height: number;
-    title: string;
-  }
->;
 export const RenderAsset =
-  (assetMap: assetMapType) =>
+  (assetMap: any): any =>
   (node: { data: { target: { sys: { id: number } } } }) => {
     const asset = assetMap.get(node.data.target.sys.id);
     if (!asset) {
@@ -43,21 +33,9 @@ export const RenderAsset =
     }
   };
 
-type entryMapType = Map<
-  number,
-  {
-    fields: { title: string };
-    __typename: string;
-    url: string;
-    list: string;
-    title: string;
-    tweetId: string;
-  }
->;
-
 RenderAsset.displayName = "RenderAsset";
 export const RenderEntry =
-  (entryMap: entryMapType) =>
+  (entryMap: any): any =>
   (node: { data: { target: { sys: { id: number } } } }) => {
     const entry = entryMap.get(node.data.target.sys.id);
     if (!entry) {
@@ -77,11 +55,8 @@ export const RenderEntry =
   };
 
 export const RenderBlock =
-  () =>
-  (node: {
-    nodeType: string;
-    content: JSX.IntrinsicAttributes & BodyProps[];
-  }) => {
+  (blockMap: any): any =>
+  (node: any) => {
     const asset = node;
     if (!asset) {
       return <></>;
