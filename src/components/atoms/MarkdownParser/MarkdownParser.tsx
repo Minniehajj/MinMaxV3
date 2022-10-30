@@ -15,9 +15,8 @@ const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
     const fetchData = async () => {
       const result = await richTextFromMarkdown(body, async (node) => {
         if (node.type === "linkReference") {
-          console.log("node", node);
           return {
-            nodeType: "link",
+            nodeType: "paragraph",
             data: {},
             content: [
               {
@@ -29,22 +28,16 @@ const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
             ],
           };
         }
-        return null;
+        return node;
       });
-      console.log(result);
-      const options = {
-        renderNode: {
-          [BLOCKS.HEADING_1]: (node: any, children: any) => <h1>{children}</h1>,
-          ["linkReference"]: (node: any, children: any) => <h1>{children}</h1>,
-        },
-      };
-      setData(documentToReactComponents(result, options));
+
+      setData(result);
     };
     fetchData();
   }, [body]);
   return (
     <article className="prose m-auto dark:prose-invert lg:prose-xl">
-      {data && data}
+      {data && documentToReactComponents(data, data.options)}
     </article>
   );
 };
