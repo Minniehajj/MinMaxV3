@@ -58,6 +58,7 @@ export const RenderBlock =
   (blockMap: any): any =>
   (node: any) => {
     const asset = node;
+    const block = blockMap.get(asset[1]);
     if (!asset) {
       return <></>;
     }
