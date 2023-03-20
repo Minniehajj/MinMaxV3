@@ -4,7 +4,7 @@ import type {
   GetStaticPropsContext,
   InferGetStaticPropsType,
 } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { createContextInner } from "server/trpc/context";
 import { appRouter } from "server/trpc/router/_app";
 import { extractPostSlugs } from "utils/extract";
@@ -18,27 +18,42 @@ import { RichText } from "components/molecules/RichText";
 import { graph } from "server/db/client";
 import { MarkdownParser } from "components/atoms/MarkdownParser";
 
-const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {
+  setBackgroundImage: (image: string) => void;
+}
+const Page = (props: PageProps) => {
   const { slug } = props;
   const postQuery = trpc.blogPost.getPost.useQuery({ slug });
   const { data, isLoading, error } = postQuery;
+  useEffect(() => {
+    props?.setBackgroundImage(data?.heroImage?.url || "");
+
+    return () => {
+      props.setBackgroundImage("");
+    };
+  }, [data?.heroImage.url, props]);
+
   if (!data || isLoading) {
     return <div>Loading...</div>;
   }
+
   if (error) {
     return <div>{error.message}</div>;
   }
+
   return (
-    <main>
+    <main className="pt-2 pb-12">
+      <div className="prose m-auto mb-8 text-center dark:prose-invert lg:prose-2xl">
+        <h1>{data.title}</h1>
+        <Image
+          {...data.heroImage}
+          priority
+          alt={data.heroImage.alt}
+          className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm dark:shadow-theme-blue"
+        />
+      </div>
       {(data?.pageBody || data.body) && (
         <div className="prose m-auto dark:prose-invert lg:prose-xl">
-          <h1>{data.title}</h1>
-          <Image
-            {...data.heroImage}
-            priority
-            alt={data.heroImage.alt}
-            className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm dark:shadow-theme-blue"
-          />
           <p className="flex items-center gap-2 text-sm">
             <TimerIcon />
             {data.readTime} minute read

@@ -20,7 +20,7 @@ const Layout: FC<LayoutProps> = ({ children, backgroundImage }) => {
           animate={{ opacity: 0.75 }}
           exit={{ opacity: 0 }}
           transition={{ ease: "easeInOut", duration: 1 }}
-          className="fixed top-0 left-0 -z-10 h-full w-full bg-theme-white bg-cover bg-center bg-no-repeat bg-blend-screen dark:bg-theme-black dark:bg-blend-multiply"
+          className="fixed top-0 left-0 -z-10 h-full min-h-[1080px] w-full bg-theme-white bg-cover bg-center bg-no-repeat bg-blend-screen dark:bg-theme-black dark:bg-blend-multiply"
           style={
             backgroundImage
               ? { backgroundImage: `url(${backgroundImage})` }

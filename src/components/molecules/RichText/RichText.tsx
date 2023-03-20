@@ -34,8 +34,8 @@ const RichText = (post: any) => {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: RenderAsset(assetMap),
       [BLOCKS.EMBEDDED_ENTRY]: RenderEntry(entryMap),
-      [BLOCKS.PARAGRAPH]: RenderBlock(blockMap),
-      ["linkReference"]: RenderBlock(blockMap),
+      [BLOCKS.PARAGRAPH]: RenderBlock(),
+      ["linkReference"]: RenderBlock(),
       [BLOCKS.HEADING_1]: (node: any, children: any) => <h1>{children}</h1>,
       [BLOCKS.HEADING_2]: (node: any, children: any) => <h2>{children}</h2>,
       [BLOCKS.HEADING_3]: (node: any, children: any) => <h3>{children}</h3>,

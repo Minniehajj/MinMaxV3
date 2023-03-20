@@ -3,11 +3,12 @@ import { CardToolTip } from "../CardToolTip";
 import { Link } from "../Link";
 import { BodyProps } from "./types";
 const Body = ({ ...props }: BodyProps) => {
+  console.log(props);
   let parsedBody;
   const p = /\[([\s\w\d-+_/,'’&]*)\]/g;
 
   if (props.nodeType === "text") {
-    const body = props.value.replace(/[\u2018\u2019]/g, "'");
+    const body = props?.value?.replace(/[\u2018\u2019]/g, "'");
 
     parsedBody = reactStringReplace(body, p, (match, i) => (
       <CardToolTip key={`index-${i}`} name={match} />

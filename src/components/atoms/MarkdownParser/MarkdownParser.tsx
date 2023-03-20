@@ -1,57 +1,57 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { richTextFromMarkdown } from "@contentful/rich-text-from-markdown";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
-import { RichText } from "components/molecules/RichText";
 import React from "react";
 import { MarkdownParserProps } from "./types";
 import Image from "next/image";
 import { MarkdownNode } from "@contentful/rich-text-from-markdown/dist/types/types";
+import { CardToolTip } from "../CardToolTip";
 const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
   // let parsedBody;
-  // const p = /\[([\s\w\d-+_/,'’&]*)\]/g;
-  // const body = children.replace(/[\u2018\u2019]/g, "'");
+  const body = children.replace(/[\u2018\u2019]/g, "'");
 
   const [data, setData] = React.useState<any>();
   React.useEffect(() => {
     const fetchData = async () => {
-      const result = await richTextFromMarkdown(
-        children,
-        (node: MarkdownNode) => {
-          if (node.type === "image") {
-            const newNode = {
-              data: {},
-              content: [],
-              nodeType: "",
-              type: "",
-            };
-            newNode.type = "embedded-asset-block";
-            newNode.nodeType = "embedded-asset-block";
-            newNode.data = {
-              target: {
-                sys: {
-                  type: "Link",
-                  linkType: "Asset",
-                  id: node.url,
-                  alt: node.alt,
-                },
+      const result = await richTextFromMarkdown(body, (node: MarkdownNode) => {
+        if (node.type === "image") {
+          const newNode = {};
+          newNode.type = "embedded-asset-block";
+          newNode.nodeType = "embedded-asset-block";
+          newNode.data = {
+            target: {
+              sys: {
+                type: "Link",
+                linkType: "Asset",
+                id: node.url,
+                alt: node.alt,
               },
-            };
-            newNode.content = [];
-            return newNode;
-          }
-
-          return null;
+            },
+          };
+          newNode.content = [];
+          return newNode;
         }
-      );
+        if (node.type === "linkReference") {
+          const newNode = {};
+          newNode.type = "linkReference";
+          newNode.nodeType = "linkReference";
+          newNode.value = node.label;
+          newNode.content = [];
+          return newNode;
+        }
+
+        return null;
+      });
       setData(result);
     };
     fetchData();
-  }, [children]);
+  }, [body]);
   const options = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: (asset: any) => {
-        console.log("node", asset);
         return (
           <Image
             src={"https://" + asset.data.target.sys.id}
@@ -61,6 +61,10 @@ const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
             quality={75}
           />
         );
+      },
+      ["linkReference"]: (node: any) => {
+        return <CardToolTip name={node.value} />;
+        return <div>Hello</div>;
       },
     },
   };

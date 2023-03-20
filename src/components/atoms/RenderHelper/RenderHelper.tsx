@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/display-name */
 import Youtube from "react-youtube";
 import Image from "next/image";
@@ -53,26 +54,23 @@ export const RenderEntry =
     }
   };
 
-export const RenderBlock =
-  (blockMap: any): any =>
-  (node: any) => {
-    const asset = node;
-    const block = blockMap.get(asset[1]);
-    if (!asset) {
+export const RenderBlock = (): any => (node: any) => {
+  const asset = node;
+  if (!asset) {
+    return <></>;
+  }
+  switch (asset.nodeType) {
+    case "paragraph":
+      const block = asset.content.map(
+        (
+          child: JSX.IntrinsicAttributes & BodyProps,
+          index: Key | null | undefined
+        ) => {
+          return <Body {...child} key={index} />;
+        }
+      );
+      return <p>{block}</p>;
+    default:
       return <></>;
-    }
-    switch (asset.nodeType) {
-      case "paragraph":
-        const block = asset.content.map(
-          (
-            child: JSX.IntrinsicAttributes & BodyProps,
-            index: Key | null | undefined
-          ) => {
-            return <Body {...child} key={index} />;
-          }
-        );
-        return <p>{block}</p>;
-      default:
-        return <></>;
-    }
-  };
+  }
+};
