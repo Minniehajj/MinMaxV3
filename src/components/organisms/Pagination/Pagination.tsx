@@ -9,7 +9,6 @@ interface PaginationProps {
 const Pagination = ({ pages, currentPage }: PaginationProps) => {
   const nextPage = currentPage * 1 + 1;
   const prevPage = currentPage * 1 - 1;
-  console.log(currentPage);
   return (
     <div className="flex items-center justify-center gap-4 pt-2 lg:justify-between">
       {currentPage > 1 && (
