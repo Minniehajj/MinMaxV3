@@ -33,8 +33,8 @@ const PaginatedBlogPage = (props: PageProps) => {
     return <div>{error.message}</div>;
   }
   return (
-    <main>
-      <div className="grid grid-cols-1 gap-4 pt-2 pb-12 md:grid-cols-2 lg:grid-cols-3">
+    <main className="pt-2 pb-12">
+      <div className="grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3">
         {data?.map((post, index: Key) => {
           return (
             <div key={index} className="relative mb-4">
@@ -83,8 +83,8 @@ const PaginatedBlogPage = (props: PageProps) => {
             </div>
           );
         })}
-        <Pagination pages={props.totalPages} currentPage={props.page} />
       </div>
+      <Pagination pages={props.totalPages} currentPage={props.page} />
     </main>
   );
 };
