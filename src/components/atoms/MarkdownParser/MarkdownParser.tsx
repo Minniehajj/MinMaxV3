@@ -1,52 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import { richTextFromMarkdown } from "@contentful/rich-text-from-markdown";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
 import React from "react";
 import { MarkdownParserProps } from "./types";
 import Image from "next/image";
-import { MarkdownNode } from "@contentful/rich-text-from-markdown/dist/types/types";
 import { CardToolTip } from "../CardToolTip";
+import parseNode from "utils/parseNode";
+
+// export declare type FallbackResolver = (mdNode: MarkdownNode) => Promise<Node | Node[] | null>;
+// richTextFromMarkdown(md: string, fallback?: FallbackResolver): Promise<Document>;
 const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
   const body = children.replace(/[\u2018\u2019]/g, "'");
   const [data, setData] = React.useState<any>();
   React.useEffect(() => {
     const fetchData = async () => {
-      const result = await richTextFromMarkdown(body, (node: MarkdownNode) => {
-        if (node.type === "image") {
-          const newNode = {};
-          newNode.type = "embedded-asset-block";
-          newNode.nodeType = "embedded-asset-block";
-          newNode.data = {
-            target: {
-              sys: {
-                type: "Link",
-                linkType: "Asset",
-                id: node.url,
-                alt: node.alt,
-              },
-            },
-          };
-          newNode.content = [];
-          return newNode;
-        }
-        if (node.type === "linkReference") {
-          const newNode = {};
-          newNode.type = "linkReference";
-          newNode.nodeType = "linkReference";
-          newNode.value = node.label;
-          newNode.content = [];
-          return newNode;
-        }
-
-        return null;
+      const result = await richTextFromMarkdown(body, async (mdNode) => {
+        return parseNode(mdNode) as any;
       });
       setData(result);
     };
     fetchData();
   }, [body]);
+
   const options = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: (asset: any) => {
