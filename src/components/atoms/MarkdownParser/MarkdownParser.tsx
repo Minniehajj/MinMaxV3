@@ -10,9 +10,7 @@ import Image from "next/image";
 import { MarkdownNode } from "@contentful/rich-text-from-markdown/dist/types/types";
 import { CardToolTip } from "../CardToolTip";
 const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
-  // let parsedBody;
   const body = children.replace(/[\u2018\u2019]/g, "'");
-
   const [data, setData] = React.useState<any>();
   React.useEffect(() => {
     const fetchData = async () => {

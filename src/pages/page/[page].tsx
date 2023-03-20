@@ -13,9 +13,10 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 
 import type {
   GetStaticPaths,
-  GetStaticProps,  
+  GetStaticProps,
   InferGetStaticPropsType,
 } from "next";
+import { Pagination } from "components/organisms/Pagination";
 interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {
   setBackgroundImage: (image: string) => void;
 }
@@ -33,7 +34,7 @@ const PaginatedBlogPage = (props: PageProps) => {
   }
   return (
     <main>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 pt-2 pb-12 md:grid-cols-2 lg:grid-cols-3">
         {data?.map((post, index: Key) => {
           return (
             <div key={index} className="relative mb-4">
@@ -68,7 +69,7 @@ const PaginatedBlogPage = (props: PageProps) => {
                         >
                           <Avatar.Root>
                             <Avatar.Image
-                              className="my-0 w-12 rounded-full"
+                              className="my-0 aspect-square w-12 rounded-full object-cover object-top"
                               src={author.image.url}
                             ></Avatar.Image>
                           </Avatar.Root>
@@ -82,6 +83,7 @@ const PaginatedBlogPage = (props: PageProps) => {
             </div>
           );
         })}
+        <Pagination pages={props.totalPages} currentPage={props.page} />
       </div>
     </main>
   );
@@ -112,12 +114,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   //   const allTags = (await getAllTags(preview)) ?? []
+  const entries = await graph.request(
+    `query{
+          postCollection(where: { slug_exists: true }) {
+              items {
+                slug
+              }
+            }
+          }`
+  );
+  const totalPosts = entries?.postCollection?.items?.length;
+  const totalPages = Math.ceil(totalPosts / 9);
+  if (!params?.page || Number(params.page) > totalPages) {
+    return {
+      notFound: true,
+    };
+  }
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
@@ -132,6 +150,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       trpcState: ssg.dehydrate(),
       slug,
       page: params?.page,
+      totalPages,
     },
     revalidate: 1,
   };

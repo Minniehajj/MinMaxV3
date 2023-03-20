@@ -14,7 +14,6 @@ const Hero: FC<HeroProps> = ({
   readTime,
   authors,
 }) => {
-  // console.log(image);
   return (
     <Link
       href={slug}

@@ -3,7 +3,6 @@ import { CardToolTip } from "../CardToolTip";
 import { Link } from "../Link";
 import { BodyProps } from "./types";
 const Body = ({ ...props }: BodyProps) => {
-  console.log(props);
   let parsedBody;
   const p = /\[([\s\w\d-+_/,'’&]*)\]/g;
 

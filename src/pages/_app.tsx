@@ -14,13 +14,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const [backgroundImage, setBackgroundImage] = React.useState("");
   return (
-    <SessionProvider session={session}>
-      <ThemeProvider attribute="class">
-        <Layout {...pageProps} backgroundImage={backgroundImage}>
-          <Component {...pageProps} setBackgroundImage={setBackgroundImage} />
-        </Layout>
-      </ThemeProvider>
-    </SessionProvider>
+    // <SessionProvider session={session}>
+    <ThemeProvider attribute="class">
+      <Layout {...pageProps} backgroundImage={backgroundImage}>
+        <Component {...pageProps} setBackgroundImage={setBackgroundImage} />
+      </Layout>
+    </ThemeProvider>
+    // </SessionProvider>
   );
 };
 

@@ -13,6 +13,7 @@ import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 
 import { PostProps } from "types";
 import { trpc } from "utils/trpc";
+import { Pagination } from "components/organisms/Pagination";
 
 interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {
   setBackgroundImage: (image: string) => void;
@@ -28,7 +29,7 @@ const Home = (props: PageProps) => {
     return <div>{error.message}</div>;
   }
   return (
-    <main className="container mx-auto flex h-screen w-full flex-col p-4">
+    <main className=" container mx-auto flex w-full max-w-7xl flex-col pt-2 pb-12">
       {data.length > 0 && data[0] && (
         <>
           <Hero
@@ -93,6 +94,7 @@ const Home = (props: PageProps) => {
               }
             })}
           </div>
+          <Pagination pages={3} currentPage={1} />
         </>
       )}
     </main>
