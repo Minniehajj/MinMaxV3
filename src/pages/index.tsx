@@ -6,7 +6,7 @@ import React, { Key } from "react";
 import { createContextInner } from "server/trpc/context";
 import { appRouter } from "server/trpc/router/_app";
 import superjson from "superjson";
-
+import { graph } from "server/db/client";
 import * as Avatar from "@radix-ui/react-avatar";
 import { TimerIcon } from "@radix-ui/react-icons";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
@@ -96,7 +96,7 @@ const Home = (props: PageProps) => {
           </div>
         </>
       )}
-      <Pagination pages={3} currentPage={1} />
+      <Pagination pages={props.totalPages} currentPage={1} />
     </main>
   );
 };
@@ -111,10 +111,21 @@ export const getStaticProps = async () => {
   });
 
   await ssg.blogPost.getPostsPaginated.fetch();
-
+  const entries = await graph.request(
+    `query{
+          postCollection(where: { slug_exists: true }) {
+              items {
+                slug
+              }
+            }
+          }`
+  );
+  const totalPosts = entries?.postCollection?.items?.length;
+  const totalPages = Math.ceil(totalPosts / 9);
   return {
     props: {
       trpcState: ssg.dehydrate(),
+      totalPages,
     },
     revalidate: 1,
   };
