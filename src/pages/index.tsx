@@ -55,12 +55,12 @@ const Home = (props: PageProps) => {
                       <h2 className="mt-2 text-center text-2xl font-bold">
                         {post.title}
                       </h2>
-                      {post.readTime && (
+                      {post.readTime ? (
                         <p className="flex items-center justify-center gap-2 text-center">
                           <TimerIcon />
                           {post.readTime} minute read
                         </p>
-                      )}
+                      ) : null}
 
                       <div className="mt-4"></div>
                       {post.authorsCollection.items?.map(
@@ -78,7 +78,7 @@ const Home = (props: PageProps) => {
                             >
                               <Avatar.Root>
                                 <Avatar.Image
-                                  className="my-0 w-12 rounded-full"
+                                  className="my-0 aspect-square w-12 rounded-full object-cover object-top"
                                   src={author.image.url}
                                 ></Avatar.Image>
                               </Avatar.Root>

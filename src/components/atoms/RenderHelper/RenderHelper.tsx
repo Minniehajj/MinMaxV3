@@ -20,7 +20,6 @@ export const RenderAsset =
       case "image/jpeg":
         return (
           <Image
-            {...asset}
             src={asset.url}
             width={asset.width}
             height={asset.height}

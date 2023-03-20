@@ -48,7 +48,7 @@ const RichText = (post: any) => {
       ),
       [BLOCKS.UL_LIST]: (node: any, children: any) => <ul>{children}</ul>,
       [BLOCKS.OL_LIST]: (node: any, children: any) => <ol>{children}</ol>,
-      [BLOCKS.HR]: (node: any, children: any) => <hr />,
+      [BLOCKS.HR]: () => <hr />,
     },
   };
 };

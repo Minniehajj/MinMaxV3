@@ -23,7 +23,19 @@
     "paths": {
       "@/public/*": [
         "../public/*"
-      ]
+      ],
+      "@/components/*": [
+        "../components/*"
+      ],
+      "@/pages/*": [
+        "../pages/*"
+      ],
+      "@/styles/*": [
+        "../styles/*"
+      ],
+      "@/utils/*": [
+        "../utils/*"
+      ],
     },
     "plugins": [
       {

@@ -24,6 +24,11 @@ const Hero: FC<HeroProps> = ({
           setBackgroundImage(image.src);
         }
       }}
+      onMouseEnter={() => {
+        if (setBackgroundImage) {
+          setBackgroundImage(image.src);
+        }
+      }}
     >
       <Image
         {...image}
@@ -44,7 +49,7 @@ const Hero: FC<HeroProps> = ({
               <p className="flex items-center gap-4 text-sm" key={index}>
                 <Avatar.Root>
                   <Avatar.Image
-                    className="my-0 w-12 rounded-full"
+                    className="my-0 aspect-square w-12 rounded-full"
                     src={author?.image?.url}
                   ></Avatar.Image>
                 </Avatar.Root>

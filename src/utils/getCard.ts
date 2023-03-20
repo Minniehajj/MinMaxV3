@@ -6,7 +6,7 @@ const getCard = async (name: string): Promise<Card | null | undefined> => {
       return result;
     })
     .catch((err) => {
-      return null;
+      return err;
     });
   return card;
 };
