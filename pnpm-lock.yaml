@@ -28,6 +28,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.33.0
   autoprefixer: ^10.4.7
   axios: ^0.27.2
+  classnames: ^2.3.2
   eslint: 8.22.0
   eslint-config-next: 13.0.0
   framer-motion: ^6.5.1
@@ -76,6 +77,7 @@ dependencies:
   '@trpc/react-query': 10.0.0_25ssdynkqzypzsiiygouaxhvuy
   '@trpc/server': 10.0.0
   axios: 0.27.2
+  classnames: 2.3.2
   framer-motion: 6.5.1_biqbaboplfbrettd7655fr4n2y
   graphql: 16.6.0
   graphql-request: 4.3.0_graphql@16.6.0
@@ -2809,6 +2811,10 @@ packages:
 
   /chownr/1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
+    dev: false
+
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
     dev: false
 
   /client-only/0.0.1:

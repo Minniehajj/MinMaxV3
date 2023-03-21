@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-
+import classnames from "classnames";
 interface PaginationProps {
   pages: number;
   currentPage: number;
@@ -10,7 +10,12 @@ const Pagination = ({ pages, currentPage }: PaginationProps) => {
   const nextPage = currentPage * 1 + 1;
   const prevPage = currentPage * 1 - 1;
   return (
-    <div className="flex items-center justify-center gap-4 pt-2 lg:justify-between">
+    <div
+      className={classnames("flex items-center justify-center gap-4 pt-2", {
+        "lg:justify-end": currentPage < pages,
+        "lg:justify-between": currentPage > 1,
+      })}
+    >
       {currentPage > 1 && (
         <Link
           href={currentPage * 1 === 2 ? `/` : `/page/${prevPage}`}

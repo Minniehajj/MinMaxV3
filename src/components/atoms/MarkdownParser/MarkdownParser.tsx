@@ -30,7 +30,7 @@ const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
       [BLOCKS.EMBEDDED_ASSET]: (asset: any) => {
         return (
           <Image
-            src={"https://" + asset.data.target.sys.id}
+            src={"https:" + asset.data.target.sys.id}
             width={asset.width || 1920}
             height={asset.height || 1080}
             alt={asset.data.target.sys.alt || "Image"}
