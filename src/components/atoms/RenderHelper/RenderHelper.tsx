@@ -44,7 +44,13 @@ export const RenderEntry =
     switch (entry.__typename) {
       case "Video":
         const videoId = getYoutubeId(entry.url);
-        return <Youtube videoId={videoId} title={entry.title} />;
+        return (
+          <Youtube
+            videoId={videoId}
+            title={entry.title}
+            iframeClassName="w-full aspect-video h-full"
+          />
+        );
       case "Decklist":
         return <Decklist list={entry.list} title={entry.title} />;
       case "TwitterEmbed":
