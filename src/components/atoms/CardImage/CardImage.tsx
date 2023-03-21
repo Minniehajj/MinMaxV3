@@ -14,7 +14,7 @@ const CardImage: FC<CardImageProps> = ({
       onClick={() => setBackgroundImage(src)}
       onMouseEnter={() => setBackgroundImage(src)}
       onFocus={() => setBackgroundImage(src)}
-      className="shadow-theme-dark bg-theme-black shadow-sm transition duration-200 ease-in-out hover:ease-in group-hover:shadow-lg dark:shadow-theme-blue"
+      className="shadow-theme-dark bg-theme-black shadow-none transition duration-200 ease-in-out hover:ease-in group-hover:shadow-sm dark:group-hover:shadow-theme-blue"
     >
       <Image
         src={src}

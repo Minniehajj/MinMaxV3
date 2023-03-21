@@ -25,13 +25,13 @@ const Page = (props: PageProps) => {
   const { slug } = props;
   const postQuery = trpc.blogPost.getPost.useQuery({ slug });
   const { data, isLoading, error } = postQuery;
-  // useEffect(() => {
-  //   props?.setBackgroundImage(data?.heroImage?.url || "");
+  useEffect(() => {
+    props?.setBackgroundImage(data?.heroImage?.url || "");
 
-  //   return () => {
-  //     props.setBackgroundImage("");
-  //   };
-  // }, [data?.heroImage.url, props]);
+    return () => {
+      props.setBackgroundImage("");
+    };
+  }, [data?.heroImage.url, props]);
 
   if (!data || isLoading) {
     return <div>Loading...</div>;
