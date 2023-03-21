@@ -3,11 +3,12 @@
 import { richTextFromMarkdown } from "@contentful/rich-text-from-markdown";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
-import React from "react";
+import React, { Key } from "react";
 import { MarkdownParserProps } from "./types";
 import Image from "next/image";
 import { CardToolTip } from "../CardToolTip";
 import parseNode from "utils/parseNode";
+import { Body, BodyProps } from "../Body";
 
 // export declare type FallbackResolver = (mdNode: MarkdownNode) => Promise<Node | Node[] | null>;
 // richTextFromMarkdown(md: string, fallback?: FallbackResolver): Promise<Document>;
@@ -39,7 +40,17 @@ const MarkdownParser = ({ children = "" }: MarkdownParserProps) => {
       },
       ["linkReference"]: (node: any) => {
         return <CardToolTip name={node.value} />;
-        return <div>Hello</div>;
+      },
+      [BLOCKS.PARAGRAPH]: (node: any) => {
+        const block = node.content.map(
+          (
+            child: JSX.IntrinsicAttributes & BodyProps,
+            index: Key | null | undefined
+          ) => {
+            return <Body {...child} key={index} />;
+          }
+        );
+        return <p>{block}</p>;
       },
     },
   };
