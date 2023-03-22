@@ -1,12 +1,8 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 
-import { POST_GRAPHQL_FIELDS } from "vars/graphQLFields";
-import {
-  extractAuthors,
-  extractAuthorSlugs,
-  extractPostEntries,
-} from "utils/extract";
+import { SIMPLE_GRAPHQL_FIELDS } from "vars/graphQLFields";
+import { extractAuthors, extractPostEntriesFromAuthors } from "utils/extract";
 
 export const authorRouter = router({
   getPostsPaginatedByAuthor: publicProcedure
@@ -31,7 +27,7 @@ export const authorRouter = router({
                 linkedFrom{
                   postCollection{
                     items{
-                      slug
+                      ${SIMPLE_GRAPHQL_FIELDS}
                     }
                   }
                 }
@@ -39,7 +35,7 @@ export const authorRouter = router({
             }
           }`
       );
-      return entries;
+      return extractPostEntriesFromAuthors(entries);
     }),
   getAuthors: publicProcedure.query(async ({ ctx }) => {
     const entry = await ctx.graph.request(
@@ -63,4 +59,32 @@ export const authorRouter = router({
     );
     return extractAuthors(entry);
   }),
+  getAuthorsBySlug: publicProcedure
+    .input(
+      z.object({
+        author: z.union([z.string(), z.string().array()]),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const entry = await ctx.graph.request(
+        `query{
+          authorCollection(where: { slug: "${input?.author}" }) {
+              items {
+                title
+                slug
+                authorType               
+                bio
+                twitter
+                image {
+                  title
+                  url
+                  width
+                  height
+                }
+              }
+            }
+          }`
+      );
+      return extractAuthors(entry);
+    }),
 });

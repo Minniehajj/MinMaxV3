@@ -35,6 +35,31 @@ pageBody {
 body
 `;
 
+export const SIMPLE_GRAPHQL_FIELDS = `
+slug
+title
+heroImage {
+  title
+  description
+  url(transform: {
+    format: WEBP
+    quality: 90
+  })
+  width
+  height
+}
+tagsCollection(limit: 3) {
+  items{
+    title
+    slug
+  }
+}
+pageBody {
+  json
+}
+body
+`;
+
 export const POST_ENTRY_GRAPHQL_FIELDS = `
   body
   pageBody{

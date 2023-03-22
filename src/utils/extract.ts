@@ -22,7 +22,12 @@ export function extractPost(fetchResponse: {
 }
 
 export function extractAuthors(fetchResponse: {
-  authorCollection: { items: PostProps[] };
+  authorCollection: {
+    items: {
+      image: { width: string; height: string; url: string };
+      title: string;
+    }[];
+  };
 }) {
   const post = fetchResponse.authorCollection.items;
   return post;
@@ -33,6 +38,30 @@ export function extractPostEntries(fetchResponse: {
 }) {
   const posts = fetchResponse.postCollection.items;
   return posts.map((post) => {
+    post.heroImage = {
+      ...post.heroImage,
+      alt: post.heroImage.title,
+      src: post.heroImage.url,
+    };
+    if (post?.pageBody?.json) {
+      post.readTime = getReadTime(JSON.stringify(post?.pageBody?.json));
+    }
+    if (post?.body) {
+      post.readTime = getReadTime(JSON.stringify(post?.body));
+    }
+
+    return post;
+  });
+}
+
+export function extractPostEntriesFromAuthors(fetchResponse: {
+  authorCollection: {
+    items: { linkedFrom: { postCollection: { items: PostProps[] } } }[];
+  };
+}) {
+  const posts =
+    fetchResponse?.authorCollection?.items[0]?.linkedFrom.postCollection.items;
+  return posts?.map((post) => {
     post.heroImage = {
       ...post.heroImage,
       alt: post.heroImage.title,
