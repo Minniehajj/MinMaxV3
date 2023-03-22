@@ -48,6 +48,14 @@ heroImage {
   width
   height
 }
+authorsCollection(limit: 2) {
+  items {
+    title
+    image {
+      url(transform: {format: WEBP, quality: 90})
+    }
+  }
+}
 tagsCollection(limit: 3) {
   items{
     title

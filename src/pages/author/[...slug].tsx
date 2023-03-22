@@ -4,7 +4,7 @@ import type {
   GetStaticPropsContext,
   InferGetStaticPropsType,
 } from "next";
-import React, { Key, useEffect } from "react";
+import React, { Key } from "react";
 import { createContextInner } from "server/trpc/context";
 import { appRouter } from "server/trpc/router/_app";
 import { extractAuthorSlugs } from "utils/extract";
@@ -66,7 +66,7 @@ const Page = (props: PageProps) => {
                 </p>
                 <div className="mt-2" />
                 <div className="flex items-center justify-center gap-4">
-                  {authors?.map((author, index: Key) => {
+                  {post?.authorsCollection?.items.map((author, index: Key) => {
                     return (
                       <p
                         className="flex items-center justify-center gap-4 text-sm"
