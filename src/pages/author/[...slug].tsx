@@ -7,7 +7,7 @@ import type {
 import React, { useEffect } from "react";
 import { createContextInner } from "server/trpc/context";
 import { appRouter } from "server/trpc/router/_app";
-import { extractPostSlugs } from "utils/extract";
+import { extractAuthorSlugs, extractPostSlugs } from "utils/extract";
 import superjson from "superjson";
 import { trpc } from "utils/trpc";
 import Image from "next/image";
@@ -23,77 +23,16 @@ interface PageProps extends InferGetStaticPropsType<typeof getStaticProps> {
 }
 const Page = (props: PageProps) => {
   const { slug } = props;
-  const postQuery = trpc.blogPost.getPost.useQuery({ slug });
-  const { data, isLoading, error } = postQuery;
-  useEffect(() => {
-    props?.setBackgroundImage(data?.heroImage?.url || "");
 
-    return () => {
-      props.setBackgroundImage("");
-    };
-  }, [data?.heroImage.url, props]);
-
-  if (!data || isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
+  const postsQuery = trpc.author.getPostsPaginatedByAuthor.useQuery({
+    page: 1,
+    author: slug as string,
+  });
+  console.log(postsQuery);
   return (
-    <main className="pt-2 pb-12">
-      <div className="prose m-auto mb-8 text-center dark:prose-invert lg:prose-2xl">
-        <h1>{data.title}</h1>
-        <Image
-          {...data.heroImage}
-          priority
-          alt={data.heroImage.alt}
-          className="shadow-theme-dark -z-[1] aspect-video w-full object-cover opacity-90 shadow-sm dark:shadow-theme-blue"
-        />
-      </div>
-      {(data?.pageBody || data.body) && (
-        <div className="prose m-auto dark:prose-invert lg:prose-xl">
-          <p className="flex items-center gap-2 text-sm">
-            <TimerIcon />
-            {data.readTime} minute read
-          </p>
-          <div className="flex gap-8">
-            {data.authorsCollection?.items?.map(
-              (
-                author: {
-                  image: { url: string };
-                  title: string;
-                },
-                index: React.Key
-              ) => {
-                return (
-                  <p className="flex items-center gap-4 text-sm" key={index}>
-                    <Avatar.Root>
-                      <Avatar.Image
-                        className="!my-0 w-12 rounded-full"
-                        alt={author.title}
-                        src={author.image.url}
-                      ></Avatar.Image>
-                    </Avatar.Root>
-                    {author.title}
-                  </p>
-                );
-              }
-            )}
-          </div>
-          <div className="mb-12" />
-          {data.body && !data?.pageBody?.json ? (
-            <MarkdownParser>{data.body}</MarkdownParser>
-          ) : (
-            documentToReactComponents(
-              data.pageBody.json,
-              RichText(data.pageBody)
-            )
-          )}
-        </div>
-      )}
-    </main>
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      Hello World
+    </div>
   );
 };
 
@@ -104,14 +43,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const entry = await graph.request(
     `query{
-          postCollection(where: { slug_exists: true }) {
+          authorCollection(where: { slug_exists: true }) {
               items {
                 slug
               }
             }
           }`
   );
-  slugs = extractPostSlugs(entry);
+  slugs = extractAuthorSlugs(entry);
 
   return {
     paths: slugs,
@@ -126,17 +65,25 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     transformer: superjson,
   });
   const slug = context?.params?.slug || [];
+  const page = context?.params?.page || 1;
   if (slug.length === 0) {
     return {
       notFound: true,
     };
   }
-  await ssg.blogPost.getPost.fetch({ slug });
+  const authorPosts = await ssg.author.getPostsPaginatedByAuthor.fetch({
+    author: slug as string,
+    page: page as number,
+  });
 
+  const totalPosts = authorPosts.items?.length;
+  const totalPages = Math.ceil(totalPosts / 9);
   return {
     props: {
       trpcState: ssg.dehydrate(),
       slug: slug,
+      page: page,
+      totalPages,
     },
     revalidate: 1,
   };

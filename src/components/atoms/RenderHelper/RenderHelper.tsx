@@ -48,7 +48,7 @@ export const RenderEntry =
           <Youtube
             videoId={videoId}
             title={entry.title}
-            iframeClassName="w-full aspect-video h-full"
+            iframeClassName="w-full h-full aspect-video"
           />
         );
       case "Decklist":

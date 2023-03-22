@@ -2,36 +2,48 @@ import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 import { POST_GRAPHQL_FIELDS } from "vars/graphQLFields";
-import { extractAuthors, extractPostEntries } from "utils/extract";
+import {
+  extractAuthors,
+  extractAuthorSlugs,
+  extractPostEntries,
+} from "utils/extract";
 
 export const authorRouter = router({
-  getPostsByAuthor: publicProcedure
-    .input(z
-      .object({
-        page: z.string().nullish(),
+  getPostsPaginatedByAuthor: publicProcedure
+    .input(
+      z.object({
+        author: z.union([z.string(), z.string().array()]),
+        page: z.number().nullish(),
       })
-      .nullish())
+    )
     .query(async ({ input, ctx }) => {
       const page = input?.page ?? 1;
-      const parsedPageNumber = parseInt(page as string, 10);
+      const parsedPageNumber = parseInt(page as unknown as string, 10);
       const queryLimit = parsedPageNumber === 1 ? 10 : 9;
       const skipMultiplier = parsedPageNumber === 1 ? 0 : parsedPageNumber - 1;
       const skip = skipMultiplier > 0 ? queryLimit * skipMultiplier : 0;
       const entries = await ctx.graph.request(
         `query{
-            postCollection(limit: ${queryLimit}, skip: ${page === 1 ? skip : skip + 1}, order: publishDate_DESC) {
+            authorCollection(where: { slug: "${
+              input?.author
+            }" }, limit: ${queryLimit}, skip: ${page === 1 ? skip : skip + 1}) {
               items {
-                ${POST_GRAPHQL_FIELDS}
+                linkedFrom{
+                  postCollection{
+                    items{
+                      slug
+                    }
+                  }
+                }
               }
             }
           }`
       );
-      return extractPostEntries(entries);
+      return entries;
     }),
-  getAuthors: publicProcedure
-    .query(async ({ ctx }) => {
-      const entry = await ctx.graph.request(
-        `query{
+  getAuthors: publicProcedure.query(async ({ ctx }) => {
+    const entry = await ctx.graph.request(
+      `query{
           authorCollection(order: sys_firstPublishedAt_DESC) {
               items {
                 title
@@ -48,7 +60,7 @@ export const authorRouter = router({
               }
             }
           }`
-      );
-      return extractAuthors(entry);
-    }),
+    );
+    return extractAuthors(entry);
+  }),
 });
